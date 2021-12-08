@@ -1,6 +1,8 @@
+'uso estricto' ;
 import { Drawable } from "../src/drawable.class";
 
-const canvas = { getContext: () => { property: 'context' }, width: 0, height: 0 };
+const canvas = document.createElement('canvas');
+document.body.prepend(canvas);
 test('public Fields [x,y,x2,y2,canvas,context,rotation,offset,width,height]', () => {
     const draw = new Drawable(canvas, 1, 2, 30, 33);
     expect(draw).toHaveProperty('x', 1);
@@ -8,7 +10,7 @@ test('public Fields [x,y,x2,y2,canvas,context,rotation,offset,width,height]', ()
     expect(draw).toHaveProperty('x2', 31);
     expect(draw).toHaveProperty('y2', 35);
     expect(draw).toHaveProperty('canvas', canvas);
-    expect(draw).toHaveProperty('context', canvas.getContext());
+    expect(draw).toHaveProperty('context', canvas.getContext('2d'));
     expect(draw).toHaveProperty('rotation', 0);
     expect(draw).toHaveProperty('offset.x', 0);
     expect(draw).toHaveProperty('offset.y', 0);

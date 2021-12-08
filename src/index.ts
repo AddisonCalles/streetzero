@@ -95,4 +95,5 @@ export class Game {
   get time(){
     return this._time;
   }
+  get fps(){return this._fps;}
 }

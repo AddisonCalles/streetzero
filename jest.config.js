@@ -13,4 +13,5 @@ module.exports = {
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.ts$",
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.tsx$",
     ],
+    setupFiles: ["jest-canvas-mock"]
 }
