@@ -1,5 +1,5 @@
 {
-    "version": "0.3.0",
+    "version": "0.3.1",
     "license": "MIT",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
@@ -17,7 +17,7 @@
     },
     "scripts": {
         "start": "tsdx watch",
-        "publish": "tsdx build & jest test & npm publish",
+        "publish": "jest test & npm publish",
         "build": "tsdx build",
         "test": "tsdx test",
         "lint": "tsdx lint",
