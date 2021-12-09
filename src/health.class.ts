@@ -1,8 +1,8 @@
 import { EventListener } from "./eventListener.class";
 
 export class Health {
-    private _health;
-    private _total;
+    private _health: number;
+    private _total: number;
     private _reduceEvent = new EventListener();
     private _deadEvent = new EventListener();
 

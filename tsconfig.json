@@ -1,6 +1,6 @@
 {
   // see https://www.typescriptlang.org/tsconfig to better understand tsconfigs
-  "include": ["src", "types"],
+  "include": ["src", "types",  "./src/**/*.ts", "./src/*.ts"],
   "compilerOptions": {
     "target": "es5",
     "module": "esnext",

@@ -1,10 +1,10 @@
 import { Kinematic } from "./kinematic.class";
 
 export class LayerPath {
-    private _color;
-    private _path;
+    private _color: string;
+    private _path: Path2D;
     private _element: Kinematic;
-    private _originalPath;
+    private _originalPath: Path2D;
     private _rotation = 0;
 
     constructor(path: Path2D, color: string, element: Kinematic) {

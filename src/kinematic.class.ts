@@ -3,7 +3,7 @@ import { Vector } from './vector.class';
 
 export class Kinematic extends Drawable {
     private _destroy = false;
-    private _path;
+    private _path: Path2D;
     private _vector = new Vector(this);
     private _enabledVectorRotation = true;
     constructor(canvas: any, x: number, y: number, width: number = 0, height: number = 0) {
