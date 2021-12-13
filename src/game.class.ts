@@ -32,7 +32,26 @@ export class Game {
     document?.addEventListener('keyup', function (event: any) {
       gameRef.onKeyUp(event);
     });
+    this._canvas?.addEventListener("touchstart", function (event: any) {
+      gameRef.onTouchStart(event);
+    }, false);
+    this._canvas?.addEventListener("touchend", function (event: any) {
+      gameRef.onTouchEnd(event);
+    }, false);
+    this._canvas?.addEventListener("touchcancel", function (event: any) {
+      gameRef.onTouchCancel(event);
+    }, false);
+    this._canvas?.addEventListener("mousedown", function (event: any) {
+      gameRef.onTouchStart(event);
+    });
+    this._canvas?.addEventListener("mouseup", function (event: any) {
+      gameRef.onTouchEnd(event);
+    });
+    this._canvas?.addEventListener("mouseout", function (event: any) {
+      gameRef.onTouchCancel(event);
+    });
   }
+
   clearCanvas() {
     if (this._context && this._canvas) this._context?.clearRect(0, 0, this._canvas?.width, this._canvas?.height);
   }
@@ -57,7 +76,7 @@ export class Game {
       const now = new Date().getTime();
       const milliSecondsDif = (now) - this._lastTime;
       this._time = (+((now - this._initTime) / 1000).toFixed(0));
-      
+
       if (milliSecondsDif >= 1000) {
         this._lastTime = new Date().getTime();
         this._fps = this._fpsCounter;
@@ -86,11 +105,11 @@ export class Game {
   onGameOver() {
     console.warn("onGameOver not implemented...");
   }
-  onFire(event:any) {
-    console.warn("onFire not implemented...","Data Event: ",event);
+  onFire(event: any) {
+    console.warn("onFire not implemented...", "Data Event: ", event);
   }
-  onMouseMove(event:any) {
-    console.warn("onFire not implemented...","Data Event: ",event);
+  onMouseMove(event: any) {
+    console.warn("onFire not implemented...", "Data Event: ", event);
   }
   onPreload() {
     console.warn("onPreload not implemented...");
@@ -98,16 +117,26 @@ export class Game {
   onRender() {
     console.error('render method not implemented...');
   }
+  onTouchStart(event:any) { 
+    console.log("onTouchStart method not implemented.", event);
+  }  
+  onTouchCancel(event:any) {
+    console.log("onTouchCancel method not implemented.", event);
+  }
+  onTouchEnd(event:any) {
+    console.log("onTouchEnd method not implemented.", event);
+  }
+
   onNextLevel() {
     console.error('onNextLevel method not implemented...');
   }
   onNexLevelPress() {
     console.error('onNexLevelPress method not implemented...');
   }
-  onKeyDown(event:any){
-    console.error('onKeyDown method not implemented...',event);
+  onKeyDown(event: any) {
+    console.error('onKeyDown method not implemented...', event);
   }
-  onKeyUp(event:any){
+  onKeyUp(event: any) {
     console.error('onKeyDown method not implemented...', event);
   }
   //#endregion
