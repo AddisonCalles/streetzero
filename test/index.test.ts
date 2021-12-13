@@ -9,7 +9,8 @@ import {
   Health as HealthTs,
   math as mathTs,
   color as colorTs,
-  Game as GameTs} from "../src/index";
+  Game as GameTs,
+  Directions as DirectionsTs} from "../src/index";
 import   {
     LayerPath,
     Drawable,
@@ -20,7 +21,8 @@ import   {
   Health,
   math,
   color,
-  Game
+  Game,
+  Directions
 } from "../dist/index.js";
 test('Module exports compilation TS', () => {
     expect(typeof LayerPath ).toBe(typeof LayerPathTs);
@@ -33,4 +35,5 @@ test('Module exports compilation TS', () => {
     expect(typeof math).toBe(typeof mathTs);
     expect(typeof color).toBe(typeof colorTs);
     expect(typeof Game).toBe(typeof GameTs);
+    expect(typeof Directions).toBe(typeof DirectionsTs);
 })

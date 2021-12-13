@@ -17,13 +17,13 @@
     },
     "scripts": {
         "start": "tsdx watch",
-        "publish": "jest test & npm publish",
         "build": "tsdx build",
         "test": "tsdx test",
         "lint": "tsdx lint",
         "prepare": "tsdx build",
         "size": "size-limit",
-        "analyze": "size-limit --why"
+        "analyze": "size-limit --why",
+        "build2": "npm run build & xcopy dist \"../juego-cohetes/node_modules/streetzero/dist/\" /s"
     },
     "peerDependencies": {},
     "husky": {

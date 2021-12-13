@@ -1,3 +1,4 @@
+import { angleBetweenPoints } from "./helpers/math";
 import { LayerPath } from "./layerPath.class";
 
 export class Drawable {
@@ -28,6 +29,10 @@ export class Drawable {
     }
     rotate(angle: number) {
         this._rotation = this._rotation + angle;
+    }
+    rotateTo(element:{x:number, y:number}){
+        const angleBetweenElements = angleBetweenPoints(this, element);
+        this._rotation = angleBetweenElements;
     }
     setPos(x: number, y: number) {
         this._x = x;
