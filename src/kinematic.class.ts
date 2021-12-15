@@ -1,3 +1,4 @@
+import { math } from '.';
 import { Drawable } from './drawable.class';
 import { Vector } from './vector.class';
 export enum Directions {
@@ -18,7 +19,15 @@ export class Kinematic extends Drawable {
         this._path = new Path2D();
         this._vector.setVector(0, 0);
     }
-
+    render(): void {
+        if (this.isDebug) {
+            this.context.fillStyle = 'orange';
+            this.context.font = "10px Arial";
+            this.context.fillText(`(Vx:${this.vector.vel.x.toFixed(1)},Vy${this.vector.vel.y.toFixed(1)}, dir: ${this.vector.dir}, rot: ${this.rotation})`, this.x, 15);
+            this.context.fill();
+        }
+        super.render();
+    }
     edgeColision(): Directions[] | false {
         const vel = this.vector.vel;
         const colisions: Directions[] = [];
@@ -35,21 +44,11 @@ export class Kinematic extends Drawable {
         if (colisions.length == 0) return false;
         return colisions;
     }
+
     hasColision(el: Kinematic) {
-        let xColision = false;
-        if (this.x <= el.x2 && el.x <= this.x2) {
-            xColision = true;
-        } else if (this.x2 >= el.x && this.x2 <= el.x2) {
-            xColision = true;
-        }
-        let yColision = false;
-        if (this.y <= el.y2 && el.y <= this.y2) {
-            yColision = true;
-        } else if (this.y2 >= el.y && this.y2 <= el.y2) {
-            yColision = true;
-        }
-        return (xColision && yColision);
+        return math.intersectionRectangles(this, el);
     }
+
     move() {
         this.gravityChecker();
         this.vector.speedUpCheck();

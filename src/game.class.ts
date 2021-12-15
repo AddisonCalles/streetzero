@@ -12,6 +12,7 @@ export class Game {
   private _time: number = 0;
   private _initTime: number = 0;
   private _lastTime: number = 0;
+  private _speed: number = 60;
   constructor(canvas: HTMLCanvasElement) {
     this._canvas = canvas;
     this._context = canvas.getContext('2d');
@@ -58,6 +59,9 @@ export class Game {
   play() {
     this._play = true;
   }
+  pause(){
+    this._play = false;
+  }
   nextLevel(sleepOffset = 0) {
     this._level++;
     this.onNexLevelPress();
@@ -84,14 +88,14 @@ export class Game {
       }
       this._fpsCounter++;
       this.onRender();
-    }, 1000 / 60)
+    }, 1000 / this.speed)
   }
 
   stop() {
     clearInterval(this._mainRunner);
     this.onStop();
   }
-  incrementPoints(amount: number) {
+  incrementPoints(amount: number=1) {
     return this._points += amount;
   }
 
@@ -143,13 +147,14 @@ export class Game {
 
   get gameOver() { return this._gameover; }
   set gameOver(value: boolean) { this._gameover = value; }
+  set speed(value){ this._speed = value;}
   get points() { return this._points; }
   get level() { return this._level; }
   get isPlay() { return this._play; }
   get time() { return this._time; }
   get initTime() { return this._initTime; }
   get fps() { return this._fps; }
-
+  get speed(){ return this._speed;}
   get context() { return this._context; }
   get canvas() { return this._canvas; }
 

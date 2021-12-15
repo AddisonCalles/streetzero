@@ -47,6 +47,7 @@ export class Drawable {
         this._offset = { x: this.width / 2, y: this.height / 2 };
     }
     render() {
+        this.context.beginPath();
         this._layers.forEach((layer) => {
             layer.render();
         });
@@ -63,6 +64,9 @@ export class Drawable {
     }
     public enableDebug(){
         this._debug = true;
+    }
+    public get isDebug(){
+        return this._debug;
     }
     public get context(): any { return this._ctx; }
     get canvas() { return this._canvas; }
