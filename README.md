@@ -10,12 +10,10 @@ You can see how use this framework in this github repository:
 
 #### Example 1: https://github.com/AddisonCalles/shoot-space.git
 #### Example 2: https://github.com/AddisonCalles/flappy_space
+
+
 ## How to start
 ---
-### Game Class
-
-Extends this class to be able to create a recurring routine and manage the basic elements of the video game.
-
 ### file html:
 
 ```html
@@ -46,6 +44,52 @@ const canvas = document.getElementById("canvas");
 const game = new MyGame(canvas);
 game.start();
 ```
+
+## Game Class
+---
+Extends this class to be able to create a recurring routine and manage the basic elements of the video game.
+## Attributes
+---
+Overwrite any of these methods within your MyGame class
+
+| Attribute  | Description |
+| :------------ |:---------------:|
+| start() | Start the life cycle of the game. This method starts the frame rate loop that allows the game graphics to be rendered. |
+| stop() | Stopt the life cycle of the game. |
+| play() | Set the ``isPlay`` property to true |
+| pause() | Set the ``isPlay`` property to false |
+| clearCanvas() | Remove all elements rendered at the current frame within the canvas  |
+| nextLevel(sleepOffset) | Pending documentation  |
+| incrementPoints(increase?:number) | Allows to increase an amount by means of the ``increase`` parameter, if the ``increase`` parameter is not set, it will increase the value of the ``points`` property by 1 |
+| gameover | Boolean property, allows to obtain or set the value of the gameover state. Setting this property to `true` or ``false`` will not start or stop the game loop. |
+| isPlay | Boolean property, it allows to obtain the value of the true play property, this property is immediately after the play method is called, and it is false when the play method has not been called or immediately after the pause method is called. |
+| speed | Property of type number, allows obtain or setting the value of the speed at which the cycle of ticks per second is executed, <br>**Example**. If we set the speed to 60, that's roughly 60 frames per second. If you want to accurately get the actual number of frames per second use the ``fps`` property. <br>**Warning:** The value of the speed property must be set before calling the ``start()`` method. |
+| points | Property of type number, It allows to obtain the accumulated points of the game. You can edit this property using the method ``incrementPoints`` |
+| level | Property of type number, It allows to obtain the value of the current game level. This value is edited via the ``nextLevel`` method. |
+| initTime | Property of type number, allows to obtain the timestamp, in millisecods format, registered when calling the ``start()`` method. |
+| fps | Property of type number, it allows to obtain the rate of average frames per second (fps). This value is updated over the course of the game execution. |
+| context | allows obtain the CanvasRenderingContext2D. |
+| canvas | allow obtain the canvas object |
+## Events
+---
+Overwrite any of these methods within your MyGame class
+
+| Event  | Description |
+| :------------ |:---------------:|
+| onStart() | Este metodo se ejecuta cuando la funcion `start` de la clase padre es llamada. |
+| onStop() | Este metodo se ejecuta cuando la funcion `stop` de la clase padre es llamada. |
+| onGameOver() | Este metodo se ejecuta cuando la funcion `gameOver` de la clase padre es llamada. |
+| onFire(event) | Este metodo es llamado cuando se detecta el evento `click` del mouse |
+| onMouseMove(event) | Pending documentation |
+| onPreload() | Pending documentation |
+| onRender() | Pending documentation |
+| onTouchStart(event) | Pending documentation |
+| onTouchCancel(event) | Pending documentation |
+| onTouchEnd(event:any) | Pending documentation |
+| onNextLevel() | Pending documentation |
+| onNexLevelPress() | Pending documentation |
+| onKeyDown(event) | Pending documentation |
+| onKeyUp(event: any) | Pending documentation |
 ## Drawable Objects
 ---
 
@@ -118,25 +162,3 @@ const game = new MyGame(canvas);
 game.start();
 game.play();
 ```
-
-
-## Events
----
-Overwrite any of these methods within your MyGame class
-
-| Event  | Description |
-| :------------ |:---------------:|
-| onStart() | Pending documentation |
-| onStop() | Pending documentation |
-| onGameOver() | Pending documentation |
-| onFire(event) | Pending documentation  |
-| onMouseMove(event) | Pending documentation |
-| onPreload() | Pending documentation |
-| onRender() | Pending documentation |
-| onTouchStart(event) | Pending documentation |
-| onTouchCancel(event) | Pending documentation |
-| onTouchEnd(event:any) | Pending documentation |
-| onNextLevel() | Pending documentation |
-| onNexLevelPress() | Pending documentation |
-| onKeyDown(event) | Pending documentation |
-| onKeyUp(event: any) | Pending documentation |
