@@ -24,17 +24,23 @@
     "scripts": {
         "start": "tsdx watch",
         "build": "tsdx build",
-        "test": "tsdx test --collectCoverage",
+        "test": "tsdx test",
+        "test:coverage": "npm test -- --coverage",
+        "test:watch": "tsdx test --watchAll",
         "lint": "tsdx lint",
         "prepare": "tsdx build",
         "size": "size-limit",
         "analyze": "size-limit --why",
+        "make:badges": "istanbul-badges-readme --coverageDir='./coverage'",
         "build2": "npm run build & xcopy dist \"../juego-cohetes/node_modules/streetzero/dist/\" /s"
     },
     "husky": {
         "hooks": {
-            "pre-commit": "tsdx lint"
+            "pre-commit": "tsdx lint && npm run test:coverage && npm run make:badges && git add 'README.md'"
         }
+    },
+    "jest":{
+        "coverageReporters": ["json-summary"]
     },
     "prettier": {
         "printWidth": 80,
@@ -60,6 +66,7 @@
         "@size-limit/preset-small-lib": "^7.0.3",
         "@types/jest": "^27.5.0",
         "husky": "^7.0.4",
+        "istanbul-badges-readme": "^1.8.1",
         "jest": "^27.1.0",
         "jest-canvas-mock": "^2.4.0",
         "size-limit": "^7.0.4",

@@ -1,6 +1,11 @@
 # Street Zero
 ![GitHub stars](https://img.shields.io/github/stars/AddisonCalles/streetzero) ![Github forks](https://img.shields.io/github/forks/AddisonCalles/streetzero) ![GitHub license](https://img.shields.io/github/license/AddisonCalles/streetzero) ![Github issues](https://img.shields.io/github/issues/AddisonCalles/streetzero)
 
+## Coverage
+
+| Statements                  | Branches                | Functions                 | Lines             |
+| --------------------------- | ----------------------- | ------------------------- | ----------------- |
+| ![Statements](https://img.shields.io/badge/statements-51.56%25-red.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-37.81%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-35.89%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-49.76%25-red.svg?style=flat) |
 
 This package is in construction.
 

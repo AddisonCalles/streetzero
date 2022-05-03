@@ -19,7 +19,7 @@ export class Game {
     this._initMouseEvents();
   }
 
-  _initMouseEvents() {
+  private _initMouseEvents() {
     const gameRef = this;
     this._canvas?.addEventListener('click', function (event: any) {
       gameRef.onFire(event);
@@ -100,34 +100,34 @@ export class Game {
   }
 
   //#region Abstracts Methods
-  onStart() {
+  protected onStart() {
     console.warn("onStop not implemented...");
   }
-  onStop() {
+  protected onStop() {
     console.warn("onStop not implemented...");
   }
-  onGameOver() {
+  protected onGameOver() {
     console.warn("onGameOver not implemented...");
   }
-  onFire(event: any) {
+  protected onFire(event: any) {
     console.warn("onFire not implemented...", "Data Event: ", event);
   }
-  onMouseMove(event: any) {
+  protected onMouseMove(event: any) {
     console.warn("onFire not implemented...", "Data Event: ", event);
   }
-  onPreload() {
+  protected onPreload() {
     console.warn("onPreload not implemented...");
   }
-  onRender() {
+  protected onRender() {
     console.error('render method not implemented...');
   }
-  onTouchStart(event:any) { 
+  protected onTouchStart(event:any) { 
     console.log("onTouchStart method not implemented.", event);
   }  
-  onTouchCancel(event:any) {
+  protected onTouchCancel(event:any) {
     console.log("onTouchCancel method not implemented.", event);
   }
-  onTouchEnd(event:any) {
+  protected onTouchEnd(event:any) {
     console.log("onTouchEnd method not implemented.", event);
   }
 
