@@ -1,17 +1,18 @@
-module.exports = {
-    presets: [
-        ['@babel/preset-env', {targets: {node: 'current'}}],
-        '@babel/preset-typescript',
-      ],
+import { jsWithBabelESM as tsjPreset} from 'ts-jest/jest-preset';
+import type { InitialOptionsTsJest } from 'ts-jest';
+const config:InitialOptionsTsJest = {
     testEnvironment: 'jsdom',
     testMatch: ["**/__tests__/**/*.ts?(x)", "**/?(*.)+(test).ts?(x)"],
     transform: {
-        "^.+\\.(js|ts)$": "ts-jest",
-    },
+        ...tsjPreset.transform,
+        // [...]
+      },
     transformIgnorePatterns: [
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.js$",
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.ts$",
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.tsx$",
     ],
     setupFiles: ["jest-canvas-mock"]
-}
+};
+
+export default config;

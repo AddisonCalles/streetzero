@@ -1,6 +1,5 @@
-'uso estricto' ;
+import 'jest-canvas-mock';
 import { Drawable } from "../src/drawable.class";
-
 const canvas = document.createElement('canvas');
 document.body.prepend(canvas);
 test('public Fields [x,y,x2,y2,canvas,context,rotation,offset,width,height]', () => {
