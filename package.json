@@ -7,7 +7,13 @@
         "type": "git",
         "url": "https://github.com/AddisonCalles/streetzero"
     },
-    "keywords": ["game", "framework", "microframework", "html", "canvas"],
+    "keywords": [
+        "game",
+        "framework",
+        "microframework",
+        "html",
+        "canvas"
+    ],
     "files": [
         "dist",
         "src"
@@ -25,7 +31,6 @@
         "analyze": "size-limit --why",
         "build2": "npm run build & xcopy dist \"../juego-cohetes/node_modules/streetzero/dist/\" /s"
     },
-    "peerDependencies": {},
     "husky": {
         "hooks": {
             "pre-commit": "tsdx lint"
@@ -40,7 +45,8 @@
     "name": "streetzero",
     "author": "Addison Calles",
     "module": "dist/streetzero.esm.js",
-    "size-limit": [{
+    "size-limit": [
+        {
             "path": "dist/streetzero.cjs.production.min.js",
             "limit": "10 KB"
         },
@@ -50,16 +56,18 @@
         }
     ],
     "devDependencies": {
+        "@babel/preset-typescript": "^7.16.0",
         "@size-limit/preset-small-lib": "^7.0.3",
         "husky": "^7.0.4",
         "jest": "^27.4.3",
+        "jest-canvas-mock": "^2.3.1",
         "size-limit": "^7.0.4",
         "ts-jest": "^27.1.0",
         "tsdx": "^0.14.1",
         "tslib": "^2.3.1",
         "typescript": "^4.5.2",
-        "@babel/preset-typescript": "^7.16.0",
-        "jest-canvas-mock": "^2.3.1"
+        "@types/jest": "^27.5.0"
     },
-    "dependencies": {}
+    "dependencies": {
+    }
 }

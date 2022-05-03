@@ -1,4 +1,5 @@
-import { math } from '.';
+
+import  * as math from './helpers/math';
 import { Drawable } from './drawable.class';
 import { Vector } from './vector.class';
 export enum Directions {
