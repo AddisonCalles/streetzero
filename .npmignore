@@ -1,0 +1,5 @@
+src
+jest.config.ts
+coverage
+.vscode
+.github
