@@ -1,11 +1,11 @@
-interface Rectangle {
+export interface Rectangle {
     x:number,
     x2:number,
     y:number,
     y2:number
 }
 
-interface Range {
+export interface Range {
     p1:number,
     p2:number
 }

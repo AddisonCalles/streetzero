@@ -11,7 +11,7 @@ export enum Directions {
 export class Kinematic extends Drawable {
     private _destroy = false;
     private _path: Path2D;
-    private _vector = new Vector(this);
+    private _vector = new Vector();
     private _enabledVectorRotation = true;
     private _gravity = 1.5;
     private _enableGravity = true;
@@ -29,7 +29,15 @@ export class Kinematic extends Drawable {
         }
         super.render();
     }
-    edgeColision(): Directions[] | false {
+
+    /**
+     * This is equivalent to calling kinematic.vector.rotateTo(kinematic, element);
+     * @param element 
+     */
+    rotateToVectorial(element:Kinematic){
+        this._vector.rotateTo(this, element);
+    }
+    edgeCollision(): Directions[] | false {
         const vel = this.vector.vel;
         const colisions: Directions[] = [];
         if ((this.x <= 0) && vel.x < 0) {
@@ -77,3 +85,4 @@ export class Kinematic extends Drawable {
     set enabledVectorRotation(value) { this._enabledVectorRotation = value; }
     get enabledVectorRotation() { return this._enabledVectorRotation; }
 }
+export default Kinematic;

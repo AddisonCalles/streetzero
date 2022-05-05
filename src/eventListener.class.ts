@@ -1,5 +1,5 @@
 export class EventListener{
-    _listeners: Function[] = [];
+    private _listeners: Function[] = [];
     constructor(){
     }
     subscribe(listener: Function){

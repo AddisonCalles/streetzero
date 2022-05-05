@@ -77,20 +77,23 @@ export class Game {
     this.onPreload();
     this._mainRunner = setInterval(() => {
       this.clearCanvas();
-      const now = new Date().getTime();
-      const milliSecondsDif = (now) - this._lastTime;
-      this._time = (+((now - this._initTime) / 1000).toFixed(0));
-
-      if (milliSecondsDif >= 1000) {
-        this._lastTime = new Date().getTime();
-        this._fps = this._fpsCounter;
-        this._fpsCounter = 0;
-      }
-      this._fpsCounter++;
+      this.updateCounters();
       this.onRender();
     }, 1000 / this.speed)
   }
 
+  private updateCounters(){
+    const now = new Date().getTime();
+    this._time = (+((now - this._initTime) / 1000).toFixed(0));
+    const milliSecondsDif = (now) - this._lastTime;
+    if (milliSecondsDif >= 1000) {
+      this._lastTime = new Date().getTime();
+      this._fps = this._fpsCounter;
+      this._fpsCounter = 0;
+    }
+    this._fpsCounter++;
+  }
+  
   stop() {
     clearInterval(this._mainRunner);
     this.onStop();
@@ -101,22 +104,22 @@ export class Game {
 
   //#region Abstracts Methods
   protected onStart() {
-    console.warn("onStop not implemented...");
+    console.log("onStop not implemented...");
   }
   protected onStop() {
-    console.warn("onStop not implemented...");
+    console.log("onStop not implemented...");
   }
   protected onGameOver() {
-    console.warn("onGameOver not implemented...");
+    console.log("onGameOver not implemented...");
   }
   protected onFire(event: any) {
-    console.warn("onFire not implemented...", "Data Event: ", event);
+    console.log("onFire not implemented...", "Data Event: ", event);
   }
   protected onMouseMove(event: any) {
-    console.warn("onFire not implemented...", "Data Event: ", event);
+    console.log("onFire not implemented...", "Data Event: ", event);
   }
   protected onPreload() {
-    console.warn("onPreload not implemented...");
+    console.log("onPreload not implemented...");
   }
   protected onRender() {
     console.error('render method not implemented...');

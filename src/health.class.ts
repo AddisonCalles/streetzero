@@ -16,12 +16,15 @@ export class Health {
     }
 
     reduce(reduce:number) {
+        if(reduce < 0) return;
         const health = this._health - reduce;
-        if (health <= 0) {
+        if (this._health > 0 && health <= 0) {
             this._health = 0;
+            this._reduceEvent.emit(this);
             this.deadEvent.emit(this);
-        } else {
+        } else if (health > 0) {
             this._health = health;
+            this._reduceEvent.emit(this);
         }
     }
 

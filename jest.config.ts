@@ -1,4 +1,4 @@
-import { jsWithBabelESM as tsjPreset} from 'ts-jest/jest-preset';
+import { jsWithTsESM as tsjPreset } from 'ts-jest/presets';
 import type { InitialOptionsTsJest } from 'ts-jest';
 const config:InitialOptionsTsJest = {
     testEnvironment: 'jsdom',
@@ -12,8 +12,17 @@ const config:InitialOptionsTsJest = {
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.ts$",
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.tsx$",
     ],
+    collectCoverageFrom:[
+        "src/**/*.{js,jsx,ts,tsx}",
+    ],
+    coveragePathIgnorePatterns:[
+        "dist",
+        "src/cli",
+        "src/templates"
+    ],
     setupFiles: ["jest-canvas-mock"],
-    coverageReporters: ["json-summary"]
+    coverageReporters: ["json-summary", "text"],
+
 };
 
 export default config;

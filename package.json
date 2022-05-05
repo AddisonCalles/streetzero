@@ -1,5 +1,5 @@
 {
-    "version": "0.4.5",
+    "version": "0.5.0",
     "license": "MIT",
     "main": "dist/index.js",
     "typings": "dist/index.d.ts",
@@ -25,22 +25,19 @@
         "start": "tsdx watch",
         "build": "tsdx build",
         "test": "tsdx test",
-        "test:coverage": "npm test -- --coverage",
-        "test:watch": "tsdx test --watchAll",
+        "test:coverage": "jest --coverage",
+        "test:watch": "jest --watchAll",
         "lint": "tsdx lint",
         "prepare": "tsdx build",
         "size": "size-limit",
         "analyze": "size-limit --why",
-        "make:badges": "istanbul-badges-readme --coverageDir='./coverage'",
+        "make:badges": "npm run test:coverage && istanbul-badges-readme --coverageDir='./coverage'",
         "build2": "npm run build & xcopy dist \"../juego-cohetes/node_modules/streetzero/dist/\" /s"
     },
     "husky": {
         "hooks": {
             "pre-commit": "tsdx lint && npm run test:coverage && npm run make:badges && git add 'README.md'"
         }
-    },
-    "jest":{
-        "coverageReporters": ["json-summary"]
     },
     "prettier": {
         "printWidth": 80,
@@ -63,17 +60,18 @@
     ],
     "devDependencies": {
         "@babel/preset-typescript": "^7.16.0",
+        "@jest/fake-timers": "^28.0.2",
         "@size-limit/preset-small-lib": "^7.0.3",
-        "@types/jest": "^27.5.0",
+        "@types/jest": "^27.0.0",
         "husky": "^7.0.4",
         "istanbul-badges-readme": "^1.8.1",
-        "jest": "^27.1.0",
+        "jest": "^27.0.0",
         "jest-canvas-mock": "^2.4.0",
         "size-limit": "^7.0.4",
-        "ts-jest": "^27.1.0",
+        "ts-jest": "^27.0.0",
+        "ts-node": "^10.7.0",
         "tsdx": "^0.14.1",
         "tslib": "^2.3.1",
-        "typescript": "^4.5.2"
-    },
-    "dependencies": {}
+        "typescript": "^4.3"
+    }
 }
