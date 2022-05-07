@@ -1,4 +1,5 @@
-import { Game } from 'streetzero';
+import { Game } from "./controllers/game.class";
+
 
 const canvas: HTMLCanvasElement = <HTMLCanvasElement>document.getElementById('canvas');
 const ctx = canvas.getContext('2d');

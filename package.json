@@ -1,97 +1,96 @@
 {
-    "version": "0.5.2-alpha.0",
-    "license": "MIT",
-    "main": "dist/index.js",
-    "bin": "dist/cli/index.js",
-    "typings": "dist/index.d.ts",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/AddisonCalles/streetzero"
-    },
-    "keywords": [
-        "streetzero",
-        "game",
-        "framework",
-        "microframework",
-        "html",
-        "canvas"
-    ],
-    "files": [
-        "dist",
-        "templates"
-    ],
-    "engines": {
-        "node": ">=10"
-    },
-    "scripts": {
-        "start": "tsdx watch",
-        "cli:build": "npm run build && node dist/cli",
-        "cli": "node dist/cli",
-        "build": "npx tsc --project .",
-        "test": "jest",
-        "test:coverage": "jest --coverage",
-        "test:watch": "jest --watchAll",
-        "lint": "tsdx lint",
-        "prepare": "tsc --project .",
-        "size": "size-limit",
-        "analyze": "size-limit --why",
-        "make:badges": "npm run test:coverage && istanbul-badges-readme --coverageDir='./coverage'",
-        "build2": "npm run build & xcopy dist \"../juego-cohetes/node_modules/streetzero/dist/\" /s"
-    },
-    "husky": {
-        "hooks": {
-            "pre-commit": "tsdx lint && npm run test:coverage && npm run make:badges && git add 'README.md'"
-        }
-    },
-    "prettier": {
-        "printWidth": 80,
-        "semi": true,
-        "singleQuote": true,
-        "trailingComma": "es5"
-    },
-    "name": "streetzero",
-    "author": "Addison Calles",
-    "module": "dist/streetzero.esm.js",
-    "size-limit": [
-        {
-            "path": "dist/streetzero.cjs.production.min.js",
-            "limit": "10 KB"
-        },
-        {
-            "path": "dist/streetzero.esm.js",
-            "limit": "10 KB"
-        }
-    ],
-    "devDependencies": {
-        "@babel/preset-typescript": "^7.16.0",
-        "@jest/fake-timers": "^28.0.2",
-        "@size-limit/preset-small-lib": "^7.0.3",
-        "@types/fs-extra": "^9.0.13",
-        "@types/inquirer": "^8.2.1",
-        "@types/jest": "^27.0.0",
-        "@typescript-eslint/eslint-plugin": "^5.22.0",
-        "@typescript-eslint/parser": "^5.22.0",
-        "eslint": "^8.14.0",
-        "eslint-config-airbnb": "^19.0.4",
-        "eslint-plugin-import": "^2.26.0",
-        "eslint-plugin-jsx-a11y": "^6.5.1",
-        "eslint-plugin-react": "^7.29.4",
-        "eslint-plugin-react-hooks": "^4.5.0",
-        "husky": "^7.0.4",
-        "istanbul-badges-readme": "^1.8.1",
-        "jest": "^27.0.0",
-        "jest-canvas-mock": "^2.4.0",
-        "size-limit": "^7.0.4",
-        "ts-jest": "^27.0.0",
-        "ts-node": "^10.7.0",
-        "tsdx": "^0.14.1",
-        "tslib": "^2.3.1",
-        "typescript": "^4.3"
-    },
-    "dependencies": {
-        "colors": "^1.4.0",
-        "enquirer": "^2.3.6",
-        "fs-extra": "^10.1.0",
-        "inquirer": "^8.2.4"
+  "name": "streetzero",
+  "author": "Addison Calles",
+  "module": "dist/streetzero.esm.js",
+  "version": "0.6.0-alpha.2",
+  "license": "MIT",
+  "main": "dist/index.js",
+  "bin": "dist/cli/index.js",
+  "typings": "dist/index.d.ts",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AddisonCalles/streetzero"
+  },
+  "keywords": [
+    "streetzero",
+    "game",
+    "framework",
+    "microframework",
+    "html",
+    "canvas"
+  ],
+  "files": [
+    "dist",
+    "templates"
+  ],
+  "engines": {
+    "node": ">=10"
+  },
+  "scripts": {
+    "start": "tsdx watch",
+    "cli:build": "npm run build && node dist/cli",
+    "cli": "node dist/cli",
+    "build": "npx tsc --project .",
+    "test": "jest",
+    "test:coverage": "jest --coverage",
+    "test:watch": "jest --watchAll",
+    "lint": "tsdx lint",
+    "prepare": "tsc --project .",
+    "size": "size-limit",
+    "analyze": "size-limit --why",
+    "make:badges": "npm run test:coverage && istanbul-badges-readme --coverageDir='./coverage'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "tsdx lint && npm run test:coverage && npm run make:badges && git add 'README.md'"
     }
+  },
+  "prettier": {
+    "printWidth": 80,
+    "semi": true,
+    "singleQuote": true,
+    "trailingComma": "es5"
+  },
+  "size-limit": [
+    {
+      "path": "dist/streetzero.cjs.production.min.js",
+      "limit": "10 KB"
+    },
+    {
+      "path": "dist/streetzero.esm.js",
+      "limit": "10 KB"
+    }
+  ],
+  "devDependencies": {
+    "@babel/preset-typescript": "^7.16.0",
+    "@jest/fake-timers": "^28.0.2",
+    "@size-limit/preset-small-lib": "^7.0.3",
+    "@types/fs-extra": "^9.0.13",
+    "@types/inquirer": "^8.2.1",
+    "@types/jest": "^27.0.0",
+    "@typescript-eslint/eslint-plugin": "^5.22.0",
+    "@typescript-eslint/parser": "^5.22.0",
+    "eslint": "^8.14.0",
+    "eslint-config-airbnb": "^19.0.4",
+    "eslint-plugin-import": "^2.26.0",
+    "eslint-plugin-jsx-a11y": "^6.5.1",
+    "eslint-plugin-react": "^7.29.4",
+    "eslint-plugin-react-hooks": "^4.5.0",
+    "husky": "^7.0.4",
+    "istanbul-badges-readme": "^1.8.1",
+    "jest": "^27.0.0",
+    "jest-canvas-mock": "^2.4.0",
+    "size-limit": "^7.0.4",
+    "ts-jest": "^27.0.0",
+    "ts-node": "^10.7.0",
+    "tsdx": "^0.14.1",
+    "tslib": "^2.3.1",
+    "typescript": "^4.3"
+  },
+  "dependencies": {
+    "colors": "^1.4.0",
+    "enquirer": "^2.3.6",
+    "fs-extra": "^10.1.0",
+    "inquirer": "^8.2.4"
+  }
 }

@@ -1,5 +1,5 @@
 import { Kinematic, LayerPath, math, color } from 'streetzero';
-import { Sounds } from '../resources/sounds.class.js';
+import { Sounds } from '../resources/sounds.class';
 
 export class EnergyBall extends Kinematic {
     private _color = ['#7f0000', '#f9a825'];

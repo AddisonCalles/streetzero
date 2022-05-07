@@ -1,13 +1,13 @@
 import fs from 'fs-extra';
 import { ProjectTemplates } from '../common/project.templates';
 import path from 'path';
+import 'colors';
+const CLIPATH = path.dirname(`${__dirname}`);
+const TEMPLATE_PATH = `${CLIPATH.replace('/dist/cli', '')}/templates/`;
 export const copyTemplate = async (
   projectPath: string,
   template: ProjectTemplates
 ): Promise<boolean> => {
-  const CLIPATH = path.dirname(`${__dirname}`);
-  const TEMPLATE_PATH = `${CLIPATH}\\..\\..\\templates\\`;
-
   if (fs.existsSync(TEMPLATE_PATH)) {
     console.log('● Check Template: ', TEMPLATE_PATH.blue, '✓'.green);
   } else {
@@ -22,11 +22,11 @@ export const copyTemplate = async (
     projectPath.blue,
     '✓'.green
   );
-  if (!(await fileCopy(`${TEMPLATE_PATH}\\base`, projectPath))) {
+  if (!(await fileCopy(`${TEMPLATE_PATH}base`, projectPath))) {
     console.error('✕ Copy Base Template Error.'.red);
     return false;
   }
-  if (!(await fileCopy(`${TEMPLATE_PATH}\\${template}`, projectPath))) {
+  if (!(await fileCopy(`${TEMPLATE_PATH}${template}`, projectPath))) {
     console.error(`✕ Copy ${template} Files Template Error.`.red);
     return false;
   }

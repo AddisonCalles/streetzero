@@ -4,6 +4,36 @@ import { Game } from '../src/game.class';
 const canvas = document.createElement('canvas');
 document.body.prepend(canvas);
 const startSystemTime = new Date(2022, 3, 1, 22, 40, 23);
+class MockGameBase extends Game {
+  protected onStart?(): void { }
+  protected onStop?(): void { }
+  protected onGameOver?(): void { }
+  protected onFire?(event: any): void {
+    event;
+  }
+  protected onMouseMove?(event: any): void {
+    event;
+  }
+  protected onPreload?(): void { }
+  protected onRender?(): void { }
+  protected onTouchStart?(event: any): void {
+    event;
+  }
+  protected onTouchCancel?(event: any): void {
+    event;
+  }
+  protected onTouchEnd?(event: any): void {
+    event;
+  }
+  protected onNextLevel?(): void { }
+  protected onNexLevelPress?(): void { }
+  protected onKeyDown?(event: any): void {
+    event;
+  }
+  protected onKeyUp?(event: any): void {
+    event;
+  }
+}
 beforeAll(() => {
   jest.useFakeTimers('modern');
   jest.spyOn(global, 'setInterval');
@@ -13,7 +43,7 @@ beforeAll(() => {
 });
 beforeEach(() => {
   jest.setSystemTime(startSystemTime.getTime());
-  
+
 });
 afterEach(() => {
   jest.clearAllTimers();
@@ -25,7 +55,7 @@ afterAll(() => {
 });
 describe('Unit Tests Game Class', () => {
   test('General Perperties', () => {
-    const game = new Game(canvas);
+    const game = new MockGameBase(canvas);
     game.speed = 30;
     expect(game.speed).toBe(30);
     expect(game.isPlay).toBeFalsy();
@@ -38,22 +68,20 @@ describe('Unit Tests Game Class', () => {
     expect(game.gameOver).toBeTruthy();
     expect(game.context).toBe(canvas.getContext('2d'));
   });
+
   test('Game Start/Stop/Preload Event', () => {
     const testOnStop = jest.fn();
     const testOnStart = jest.fn();
     const testOnPreload = jest.fn();
-    class MockGame extends Game {
+    class MockGame extends MockGameBase {
       onStart() {
         testOnStart();
-        super.onStart();
       }
       onStop() {
         testOnStop();
-        super.onStart();
       }
       onPreload() {
         testOnPreload();
-        super.onPreload();
       }
     }
     var game = new MockGame(canvas);
@@ -78,26 +106,21 @@ describe('Unit Tests Game Class', () => {
     const testOnGameOver = jest.fn();
     const testOnPreload = jest.fn();
     const testOnRender = jest.fn();
-    class MockGame extends Game {
+    class MockGame extends MockGameBase {
       onStart() {
         testOnStart();
-        super.onStart();
       }
       onStop() {
         testOnStop();
-        super.onStop();
       }
       onGameOver() {
         testOnGameOver();
-        super.onGameOver();
       }
       onPreload() {
         testOnPreload();
-        super.onPreload();
       }
       onRender() {
         testOnRender();
-        super.onRender();
       }
     }
     var game = new MockGame(canvas);
@@ -127,18 +150,14 @@ describe('Unit Tests Game Class', () => {
   test('Levels & Points Events', () => {
     const testOnNextLevel = jest.fn();
     const testOnNexLevelPress = jest.fn();
-    class MockGame extends Game {
+    class MockGame extends MockGameBase {
       onNextLevel() {
         testOnNextLevel();
-        super.onNextLevel();
       }
       onNexLevelPress() {
         testOnNexLevelPress();
-        super.onNexLevelPress();
       }
-      onGameOver(){
-        super.onGameOver();
-      }
+      onGameOver() { }
     }
     var game = new MockGame(canvas);
     //Next Level
@@ -159,10 +178,11 @@ describe('Unit Tests Game Class', () => {
     expect(game.points).toBe(36);
     expect(game.onGameOver());
   });
+
   test('Mouse and key events', () => {
     const testOnNextLevel = jest.fn();
     const testOnNexLevelPress = jest.fn();
-    class MockGame extends Game {
+    class MockGame extends MockGameBase {
       onNextLevel() {
         testOnNextLevel();
       }
@@ -175,7 +195,6 @@ describe('Unit Tests Game Class', () => {
 
     game.nextLevel(0);
     expect(testOnNexLevelPress).lastCalledWith();
-    //canvas.dispatchEvent(event)
-
   });
+
 });

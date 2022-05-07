@@ -1,9 +1,9 @@
 import { Directions, Kinematic } from 'streetzero';
 import { math } from 'streetzero';
-import { queenShipV1Drawing } from '../../drawings/enemies/queen-ship-v1.drawing.js';
-import { EnergyBall } from '../energyball.class.js';
-import { Player } from '../player.class.js';
-import { Enemy } from './enemy.class.js';
+import { queenShipV1Drawing } from '../../drawings/enemies/queen-ship.drawing';
+import { EnergyBall } from '../energyball.class';
+import { Player } from '../player.class';
+import { Enemy } from './enemy.class';
 
 export class QueenShipV1 extends Enemy {
     _gunsRunnerProcess: NodeJS.Timer | undefined;
@@ -85,7 +85,7 @@ export class QueenShipV1 extends Enemy {
         if (!this._gunsRunnerProcess) return super.destroy();
         try {
             clearInterval(this._gunsRunnerProcess);
-        } catch (error) {}
+        } catch (error) { }
         return super.destroy();
     }
 }

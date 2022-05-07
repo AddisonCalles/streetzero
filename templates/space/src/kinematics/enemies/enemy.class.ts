@@ -1,7 +1,7 @@
 import { Health, Kinematic } from 'streetzero';
-import { Colors } from '../../ui/colors.js';
-import { HealthBar } from '../../ui/healthBar.class.js';
-import { Player } from '../player.class.js';
+import { Colors } from '../../ui/colors';
+import { HealthBar } from '../../ui/healthBar.class';
+import { Player } from '../player.class';
 
 export class Enemy extends Kinematic {
     private _player;
@@ -17,6 +17,7 @@ export class Enemy extends Kinematic {
         player: Player
     ) {
         super(canvas, x, y, width, height);
+        super.enabledGravity = false;
         super.centerOffset();
         this._health = new Health(_health);
         this._healthBar = new HealthBar(canvas, x, y + this.height + 5, this.width, 1, this.health);

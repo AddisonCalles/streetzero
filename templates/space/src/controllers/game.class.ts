@@ -1,41 +1,41 @@
 import { SmallShip, EnemyLevels } from "../kinematics/enemies/smallShip.class";
-import { Sounds } from "../resources/sounds.class.js";
-import { Player } from "../kinematics/player.class.js";
-import { Colors } from "../ui/colors.js";
-import { QueenShipV1 } from "../kinematics/enemies/queenshipv1.class.js";
-import { math, EventListener, Game as GameZero } from 'streetzero';
+import { Sounds } from "../resources/sounds.class";
+import { Player } from "../kinematics/player.class";
+import { Colors } from "../ui/colors";
+import { QueenShipV1 } from "../kinematics/enemies/queenship.class";
+import { math, Game as GameZero } from 'streetzero';
 import { Enemy } from "../kinematics/enemies/enemy.class";
 
-export class Game extends GameZero{
+export class Game extends GameZero {
     private _player;
     #points = 0;
-    private _enemies:Enemy[] = [];
+    private _enemies: Enemy[] = [];
     private _levelText = "";
     private _queen = false;
     private _queenLevel = 25;
     private _resetText = `Press click to reset...`;
     private _secondsToReset = 3;
-    constructor(canvas:HTMLCanvasElement) {
+    constructor(canvas: HTMLCanvasElement) {
         super(canvas);
-        this._player = new Player(canvas, '#4f83cc', 20, 50, 15);    
-        this._player.health.deadEvent.subscribe(()=>{
+        this._player = new Player(canvas, '#4f83cc', 20, 50, 15);
+        this._player.health.deadEvent.subscribe(() => {
             super.gameOver = true;
-        })    
+        })
     }
 
     onRender() {
-        if(!this.context) return;
+        if (!this.context) return;
         if (this.gameOver) {
             this.gameOverScreen()
             return;
         }
         this.context.fillStyle = Colors.background;
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        
+
         if (this.isPlay) {
             this._player.render();
             this.renderEnemies();
-            if (this.gameOver ) {
+            if (this.gameOver) {
                 this.onGameOver();
             }
             if (this._levelText != '') {
@@ -47,7 +47,7 @@ export class Game extends GameZero{
             }
         }
     }
-    onFire(){
+    onFire() {
         if (!this.isPlay) {
             this.play();
         } else if (this.gameOver) {
@@ -56,7 +56,7 @@ export class Game extends GameZero{
             this.player.fire();
         }
     }
-    onMouseMove(event:any){
+    onMouseMove(event: any) {
         this.player.setPos(10, event.offsetY - this.player.height);
     }
     onGameOver() {
@@ -77,7 +77,7 @@ export class Game extends GameZero{
             }
         });
         this._enemies = this._enemies.filter(enemy => !enemy.isDestroy());
-        if(this.level % this._queenLevel == 0 && this._queen){
+        if (this.level % this._queenLevel == 0 && this._queen) {
             //Is Queen level
         }
         else if (this._enemies.length == 0 && this._levelText == '') {
@@ -87,28 +87,28 @@ export class Game extends GameZero{
     }
     reset() {
         setInterval(() => {
-            if(this._secondsToReset == 0){
+            if (this._secondsToReset == 0) {
                 document.location.reload();
             }
             this._resetText = `Reset in ${this._secondsToReset} seconds...`;
             this._secondsToReset--;
-        },  1000);
+        }, 1000);
     }
     onNextLevel() {
-        if(this.level % this._queenLevel==0){
-                this._enemies.push(new QueenShipV1(this.canvas, this._player));
-            }
+        if (this.level % this._queenLevel == 0) {
+            this._enemies.push(new QueenShipV1(this.canvas, this._player));
+        }
         this.addEnemies(this.level);
     }
     private gameOverScreen() {
-        if(!this.context) return;
+        if (!this.context) return;
         this.context.font = "40px Arial";
         this.context.fillStyle = 'gray';
         this.context.fillText(`Game Over`, (this.canvas.width / 2) - 100, this.canvas.height / 2);
         this.context.font = "18px Arial";
         this.context.fillText(this._resetText, (this.canvas.width / 2) - 100, (this.canvas.height / 2) + 35);
     }
-    private addEnemies(count:number) {
+    private addEnemies(count: number) {
         for (let index = 0; index < count; index++) {
             let levelEnemy = EnemyLevels.level1;
             if (index < 10) {

@@ -1,5 +1,5 @@
 {
-    "name": "juego-canvas",
+    "name": "street-zero-game-example",
     "version": "1.0.0",
     "description": "",
     "main": "./src/main.ts",
@@ -12,7 +12,7 @@
         "type": "git",
         "url": "git+https://github.com/AddisonCalles/shoot-space.git"
     },
-    "author": "Addison Calles",
+    "author": "",
     "license": "ISC",
     "bugs": {
         "url": "https://github.com/AddisonCalles/shoot-space/issues"
@@ -20,7 +20,7 @@
     "homepage": "https://github.com/AddisonCalles/shoot-space#readme",
     "dependencies": {
         "dotenv": "^16.0.0",
-        "streetzero": "^0.5.1",
+        "streetzero": "^0.6.0-alpha.2",
         "webpack": "^5.72.0",
         "webpack-cli": "^4.9.2",
         "webpack-dev-server": "^4.9.0"

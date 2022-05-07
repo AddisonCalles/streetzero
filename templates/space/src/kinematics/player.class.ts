@@ -1,9 +1,9 @@
 import { Kinematic, Health } from 'streetzero';
-import { HealthBar } from '../ui/healthBar.class.js';
-import { Sounds } from '../resources/sounds.class.js';
-import { Rocket } from './rocket.class.js';
-import { SpaceShipV2Drawing } from '../drawings/space-ship-v2.drawing.js';
-import { Enemy } from './enemies/enemy.class.js';
+import { HealthBar } from '../ui/healthBar.class';
+import { Sounds } from '../resources/sounds.class';
+import { Rocket } from './rocket.class';
+import { SpaceShipV2Drawing } from '../drawings/space-ship.drawing';
+import { Enemy } from './enemies/enemy.class';
 
 export class Player extends Kinematic {
     private _rockets: Rocket[] = [];

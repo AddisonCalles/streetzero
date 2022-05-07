@@ -1,7 +1,7 @@
 import { math } from 'streetzero';
-import { SpaceShipV2Drawing } from '../../drawings/space-ship-v2.drawing.js';
-import { Player } from '../player.class.js';
-import { Enemy } from './enemy.class.js';
+import { SpaceShipV2Drawing } from '../../drawings/space-ship.drawing';
+import { Player } from '../player.class';
+import { Enemy } from './enemy.class';
 
 export interface EnemyLevel {
     color: string;
@@ -63,7 +63,7 @@ export class SmallShip extends Enemy {
         if (!this._evilMode) return super.destroy();
         try {
             clearInterval(this._evilMode);
-        } catch (error) {}
+        } catch (error) { }
         super.destroy();
     }
 }

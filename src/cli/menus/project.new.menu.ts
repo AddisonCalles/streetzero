@@ -1,7 +1,7 @@
 import { prompt } from 'inquirer';
 import { Action } from '../actions';
 import { ControllerFunction } from '../controller.interface';
-import { cwd } from 'node:process';
+import { cwd } from 'process';
 import { copyTemplate } from '../helpers/project.new.helper';
 import { ProjectTemplates } from '../common/project.templates';
 

@@ -20,76 +20,76 @@ export abstract class Game {
 
   private _initMouseEvents() {
     const gameRef = this;
-    this._canvas?.addEventListener('click', function(event: any) {
-      gameRef.onFire(event);
+    this._canvas?.addEventListener('click', function (event: any) {
+      gameRef.onFire?.(event);
     });
-    this._canvas?.addEventListener('mousemove', function(event: any) {
-      gameRef.onMouseMove(event);
+    this._canvas?.addEventListener('mousemove', function (event: any) {
+      gameRef.onMouseMove?.(event);
     });
-    document?.addEventListener('keydown', function(event: any) {
-      gameRef.onKeyDown(event);
+    document?.addEventListener('keydown', function (event: any) {
+      gameRef.onKeyDown?.(event);
     });
-    document?.addEventListener('keyup', function(event: any) {
-      gameRef.onKeyUp(event);
+    document?.addEventListener('keyup', function (event: any) {
+      gameRef.onKeyUp?.(event);
     });
     this._canvas?.addEventListener(
       'touchstart',
-      function(event: any) {
-        gameRef.onTouchStart(event);
+      function (event: any) {
+        gameRef.onTouchStart?.(event);
       },
       false
     );
     this._canvas?.addEventListener(
       'touchend',
-      function(event: any) {
-        gameRef.onTouchEnd(event);
+      function (event: any) {
+        gameRef.onTouchEnd?.(event);
       },
       false
     );
     this._canvas?.addEventListener(
       'touchcancel',
-      function(event: any) {
-        gameRef.onTouchCancel(event);
+      function (event: any) {
+        gameRef.onTouchCancel?.(event);
       },
       false
     );
-    this._canvas?.addEventListener('mousedown', function(event: any) {
-      gameRef.onTouchStart(event);
+    this._canvas?.addEventListener('mousedown', function (event: any) {
+      gameRef.onTouchStart?.(event);
     });
-    this._canvas?.addEventListener('mouseup', function(event: any) {
-      gameRef.onTouchEnd(event);
+    this._canvas?.addEventListener('mouseup', function (event: any) {
+      gameRef.onTouchEnd?.(event);
     });
-    this._canvas?.addEventListener('mouseout', function(event: any) {
-      gameRef.onTouchCancel(event);
+    this._canvas?.addEventListener('mouseout', function (event: any) {
+      gameRef.onTouchCancel?.(event);
     });
   }
 
-  clearCanvas() {
+  public clearCanvas() {
     if (this._context && this._canvas)
       this._context?.clearRect(0, 0, this._canvas?.width, this._canvas?.height);
   }
-  play() {
+  public play() {
     this._play = true;
   }
-  pause() {
+  public pause() {
     this._play = false;
   }
-  nextLevel(sleepOffset = 0) {
+  public nextLevel(sleepOffset = 0) {
     this._level++;
-    this.onNexLevelPress();
+    this.onNexLevelPress?.();
     setTimeout(() => {
-      this.onNextLevel();
+      this.onNextLevel?.();
     }, sleepOffset);
   }
 
-  start() {
-    this.onStart();
+  public start() {
+    this.onStart?.();
     this._initTime = new Date().getTime();
-    this.onPreload();
+    this.onPreload?.();
     this._mainRunner = setInterval(() => {
       this.clearCanvas();
       this.updateCounters();
-      this.onRender();
+      this.onRender?.();
     }, 1000 / this.speed);
   }
 
@@ -105,56 +105,29 @@ export abstract class Game {
     this._fpsCounter++;
   }
 
-  stop() {
+  public stop() {
     clearInterval(this._mainRunner);
-    this.onStop();
+    this.onStop?.();
   }
-  incrementPoints(amount: number = 1) {
+  public incrementPoints(amount: number = 1) {
     return (this._points += amount);
   }
 
   //#region Abstracts Methods
-  protected onStart() {
-    console.log('onStop not implemented...');
-  }
-  protected onStop() {
-    console.log('onStop not implemented...');
-  }
-  protected onGameOver() {
-    console.log('onGameOver not implemented...');
-  }
-  protected onFire(event: any) {
-    console.log('onFire not implemented...', 'Data Event: ', event);
-  }
-  protected onMouseMove(event: any) {
-    console.log('onFire not implemented...', 'Data Event: ', event);
-  }
-  protected onPreload() {
-    console.log('onPreload not implemented...');
-  }
-  abstract onRender(): void;
-  protected onTouchStart(event: any) {
-    console.log('onTouchStart method not implemented.', event);
-  }
-  protected onTouchCancel(event: any) {
-    console.log('onTouchCancel method not implemented.', event);
-  }
-  protected onTouchEnd(event: any) {
-    console.log('onTouchEnd method not implemented.', event);
-  }
-
-  onNextLevel() {
-    console.error('onNextLevel method not implemented...');
-  }
-  onNexLevelPress() {
-    console.error('onNexLevelPress method not implemented...');
-  }
-  onKeyDown(event: any) {
-    console.error('onKeyDown method not implemented...', event);
-  }
-  onKeyUp(event: any) {
-    console.error('onKeyDown method not implemented...', event);
-  }
+  protected abstract onStart?(): void;
+  protected abstract onStop?(): void;
+  protected abstract onGameOver?(): void;
+  protected abstract onFire?(event: any): void;
+  protected abstract onMouseMove?(event: any): void;
+  protected abstract onPreload?(): void;
+  protected abstract onRender?(): void;
+  protected abstract onTouchStart?(event: any): void;
+  protected abstract onTouchCancel?(event: any): void;
+  protected abstract onTouchEnd?(event: any): void;
+  protected abstract onNextLevel?(): void;
+  protected abstract onNexLevelPress?(): void;
+  protected abstract onKeyDown?(event: any): void;
+  protected abstract onKeyUp?(event: any): void;
   //#endregion
 
   get gameOver() {

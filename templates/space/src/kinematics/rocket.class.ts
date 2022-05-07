@@ -1,5 +1,5 @@
 import { Kinematic, LayerPath } from 'streetzero';
-import { Sounds } from '../resources/sounds.class.js';
+import { Sounds } from '../resources/sounds.class';
 
 export class Rocket extends Kinematic {
     private _primaryColor;
@@ -7,6 +7,7 @@ export class Rocket extends Kinematic {
         Sounds.shoot();
         super(canvas, x, y, 30, 10);
         this._primaryColor = color;
+        super.enabledGravity = false;
         this.initLayer();
     }
     initLayer() {
