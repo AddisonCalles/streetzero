@@ -29,7 +29,15 @@ You can see how use this framework in this github repository:
 1. Install package:
 
 ```bash
-npm i streetzero
+npm i streetzero -g
+```
+
+## Make Project
+
+1. run streetzero CLI
+
+```bash
+streetzero
 ```
 
 2. Select the option 1.

@@ -2,7 +2,7 @@
   "name": "streetzero",
   "author": "Addison Calles",
   "module": "dist/streetzero.esm.js",
-  "version": "0.6.0-alpha.3",
+  "version": "0.6.0-alpha.4",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": "dist/cli/index.js",
