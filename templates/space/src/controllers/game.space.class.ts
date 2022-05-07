@@ -3,10 +3,10 @@ import { Sounds } from "../resources/sounds.class";
 import { Player } from "../kinematics/player.class";
 import { Colors } from "../ui/colors";
 import { QueenShipV1 } from "../kinematics/enemies/queenship.class";
-import { math, Game as GameZero } from 'streetzero';
+import { math, Game } from 'streetzero';
 import { Enemy } from "../kinematics/enemies/enemy.class";
 
-export class Game extends GameZero {
+export class GameSpace extends Game {
     private _player;
     #points = 0;
     private _enemies: Enemy[] = [];
@@ -43,7 +43,7 @@ export class Game extends GameZero {
                 this.context.fillStyle = Colors.title;
                 this.context.fillText(this._levelText, (this.canvas.width / 2) - 25, this.canvas.height / 2);
                 this.context.font = "10px Arial";
-                this.context.fillText('Created by Addison Calles', (this.canvas.width / 2) - 50, (this.canvas.height / 2) + 20);
+                this.context.fillText('Powered By StreetZero A.C.', (this.canvas.width / 2) - 50, (this.canvas.height / 2) + 20);
             }
         }
     }
@@ -100,6 +100,16 @@ export class Game extends GameZero {
         }
         this.addEnemies(this.level);
     }
+    onKeyDown() { }
+    onKeyUp() { }
+    onNexLevelPress() { }
+    onPreload() { }
+    onStart() { }
+    onStop() { }
+    onTouchStart() { }
+    onTouchEnd() { }
+    onTouchCancel() { }
+
     private gameOverScreen() {
         if (!this.context) return;
         this.context.font = "40px Arial";
