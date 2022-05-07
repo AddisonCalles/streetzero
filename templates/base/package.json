@@ -20,7 +20,7 @@
     "homepage": "https://github.com/AddisonCalles/shoot-space#readme",
     "dependencies": {
         "dotenv": "^16.0.0",
-        "streetzero": "^0.6.0-alpha.2",
+        "streetzero": "^0.6.0-alpha.3",
         "webpack": "^5.72.0",
         "webpack-cli": "^4.9.2",
         "webpack-dev-server": "^4.9.0"
