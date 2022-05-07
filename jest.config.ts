@@ -8,6 +8,7 @@ const config:InitialOptionsTsJest = {
         // [...]
       },
     transformIgnorePatterns: [
+        "/node_modules/tslib/.+\\.js$",
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.js$",
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.ts$",
         "/node_modules/(?![@autofiy/autofiyable|@autofiy/property]).+\\.tsx$",
@@ -17,8 +18,7 @@ const config:InitialOptionsTsJest = {
     ],
     coveragePathIgnorePatterns:[
         "dist",
-        "src/cli",
-        "src/templates"
+        "templates"
     ],
     setupFiles: ["jest-canvas-mock"],
     coverageReporters: ["json-summary", "text"],

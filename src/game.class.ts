@@ -1,5 +1,4 @@
-
-export class Game {
+export abstract class Game {
   private _play = false;
   private _level = 0;
   private _context: CanvasRenderingContext2D | null;
@@ -21,45 +20,58 @@ export class Game {
 
   private _initMouseEvents() {
     const gameRef = this;
-    this._canvas?.addEventListener('click', function (event: any) {
+    this._canvas?.addEventListener('click', function(event: any) {
       gameRef.onFire(event);
     });
-    this._canvas?.addEventListener('mousemove', function (event: any) {
+    this._canvas?.addEventListener('mousemove', function(event: any) {
       gameRef.onMouseMove(event);
     });
-    document?.addEventListener('keydown', function (event: any) {
+    document?.addEventListener('keydown', function(event: any) {
       gameRef.onKeyDown(event);
     });
-    document?.addEventListener('keyup', function (event: any) {
+    document?.addEventListener('keyup', function(event: any) {
       gameRef.onKeyUp(event);
     });
-    this._canvas?.addEventListener("touchstart", function (event: any) {
-      gameRef.onTouchStart(event);
-    }, false);
-    this._canvas?.addEventListener("touchend", function (event: any) {
-      gameRef.onTouchEnd(event);
-    }, false);
-    this._canvas?.addEventListener("touchcancel", function (event: any) {
-      gameRef.onTouchCancel(event);
-    }, false);
-    this._canvas?.addEventListener("mousedown", function (event: any) {
+    this._canvas?.addEventListener(
+      'touchstart',
+      function(event: any) {
+        gameRef.onTouchStart(event);
+      },
+      false
+    );
+    this._canvas?.addEventListener(
+      'touchend',
+      function(event: any) {
+        gameRef.onTouchEnd(event);
+      },
+      false
+    );
+    this._canvas?.addEventListener(
+      'touchcancel',
+      function(event: any) {
+        gameRef.onTouchCancel(event);
+      },
+      false
+    );
+    this._canvas?.addEventListener('mousedown', function(event: any) {
       gameRef.onTouchStart(event);
     });
-    this._canvas?.addEventListener("mouseup", function (event: any) {
+    this._canvas?.addEventListener('mouseup', function(event: any) {
       gameRef.onTouchEnd(event);
     });
-    this._canvas?.addEventListener("mouseout", function (event: any) {
+    this._canvas?.addEventListener('mouseout', function(event: any) {
       gameRef.onTouchCancel(event);
     });
   }
 
   clearCanvas() {
-    if (this._context && this._canvas) this._context?.clearRect(0, 0, this._canvas?.width, this._canvas?.height);
+    if (this._context && this._canvas)
+      this._context?.clearRect(0, 0, this._canvas?.width, this._canvas?.height);
   }
   play() {
     this._play = true;
   }
-  pause(){
+  pause() {
     this._play = false;
   }
   nextLevel(sleepOffset = 0) {
@@ -70,7 +82,6 @@ export class Game {
     }, sleepOffset);
   }
 
-
   start() {
     this.onStart();
     this._initTime = new Date().getTime();
@@ -79,13 +90,13 @@ export class Game {
       this.clearCanvas();
       this.updateCounters();
       this.onRender();
-    }, 1000 / this.speed)
+    }, 1000 / this.speed);
   }
 
-  private updateCounters(){
+  private updateCounters() {
     const now = new Date().getTime();
-    this._time = (+((now - this._initTime) / 1000).toFixed(0));
-    const milliSecondsDif = (now) - this._lastTime;
+    this._time = +((now - this._initTime) / 1000).toFixed(0);
+    const milliSecondsDif = now - this._lastTime;
     if (milliSecondsDif >= 1000) {
       this._lastTime = new Date().getTime();
       this._fps = this._fpsCounter;
@@ -93,45 +104,43 @@ export class Game {
     }
     this._fpsCounter++;
   }
-  
+
   stop() {
     clearInterval(this._mainRunner);
     this.onStop();
   }
-  incrementPoints(amount: number=1) {
-    return this._points += amount;
+  incrementPoints(amount: number = 1) {
+    return (this._points += amount);
   }
 
   //#region Abstracts Methods
   protected onStart() {
-    console.log("onStop not implemented...");
+    console.log('onStop not implemented...');
   }
   protected onStop() {
-    console.log("onStop not implemented...");
+    console.log('onStop not implemented...');
   }
   protected onGameOver() {
-    console.log("onGameOver not implemented...");
+    console.log('onGameOver not implemented...');
   }
   protected onFire(event: any) {
-    console.log("onFire not implemented...", "Data Event: ", event);
+    console.log('onFire not implemented...', 'Data Event: ', event);
   }
   protected onMouseMove(event: any) {
-    console.log("onFire not implemented...", "Data Event: ", event);
+    console.log('onFire not implemented...', 'Data Event: ', event);
   }
   protected onPreload() {
-    console.log("onPreload not implemented...");
+    console.log('onPreload not implemented...');
   }
-  protected onRender() {
-    console.error('render method not implemented...');
+  abstract onRender(): void;
+  protected onTouchStart(event: any) {
+    console.log('onTouchStart method not implemented.', event);
   }
-  protected onTouchStart(event:any) { 
-    console.log("onTouchStart method not implemented.", event);
-  }  
-  protected onTouchCancel(event:any) {
-    console.log("onTouchCancel method not implemented.", event);
+  protected onTouchCancel(event: any) {
+    console.log('onTouchCancel method not implemented.', event);
   }
-  protected onTouchEnd(event:any) {
-    console.log("onTouchEnd method not implemented.", event);
+  protected onTouchEnd(event: any) {
+    console.log('onTouchEnd method not implemented.', event);
   }
 
   onNextLevel() {
@@ -148,17 +157,40 @@ export class Game {
   }
   //#endregion
 
-  get gameOver() { return this._gameover; }
-  set gameOver(value: boolean) { this._gameover = value; }
-  set speed(value){ this._speed = value;}
-  get points() { return this._points; }
-  get level() { return this._level; }
-  get isPlay() { return this._play; }
-  get time() { return this._time; }
-  get initTime() { return this._initTime; }
-  get fps() { return this._fps; }
-  get speed(){ return this._speed;}
-  get context() { return this._context; }
-  get canvas() { return this._canvas; }
-
+  get gameOver() {
+    return this._gameover;
+  }
+  set gameOver(value: boolean) {
+    this._gameover = value;
+  }
+  set speed(value) {
+    this._speed = value;
+  }
+  get points() {
+    return this._points;
+  }
+  get level() {
+    return this._level;
+  }
+  get isPlay() {
+    return this._play;
+  }
+  get time() {
+    return this._time;
+  }
+  get initTime() {
+    return this._initTime;
+  }
+  get fps() {
+    return this._fps;
+  }
+  get speed() {
+    return this._speed;
+  }
+  get context() {
+    return this._context;
+  }
+  get canvas() {
+    return this._canvas;
+  }
 }
