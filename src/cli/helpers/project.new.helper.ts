@@ -2,8 +2,9 @@ import fs from 'fs-extra';
 import { ProjectTemplates } from '../common/project.templates';
 import path from 'path';
 import 'colors';
-const CLIPATH = path.dirname(`${__dirname}`);
-const TEMPLATE_PATH = `${CLIPATH.replace('/dist/cli', '')}/templates/`;
+export const CLIPATH = path.dirname(`${__dirname}`);
+export const PROJECT = CLIPATH.split('dist')[0].split('src')[0];
+export const TEMPLATE_PATH = `${PROJECT}templates/`;
 export const copyTemplate = async (
   projectPath: string,
   template: ProjectTemplates

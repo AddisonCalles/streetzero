@@ -1,17 +1,18 @@
 import 'jest-canvas-mock';
 import 'jest';
-beforeAll(() => {
-});
-beforeEach(() => {
- 
-});
-afterEach(() => {
-});
-afterAll(() => {
-});
-describe('Unit Tests Game Class', () => {
+import fs from 'fs';
+import {
+  PROJECT,
+  TEMPLATE_PATH,
+} from '../../src/cli/helpers/project.new.helper';
+beforeAll(() => {});
+beforeEach(() => {});
+afterEach(() => {});
+afterAll(() => {});
+describe('Make project test', () => {
   test('General Perperties', () => {
-  
+    console.log(TEMPLATE_PATH);
+    expect(fs.existsSync(TEMPLATE_PATH)).toBeTruthy();
+    expect(fs.existsSync(PROJECT)).toBeTruthy();
   });
-  
 });
