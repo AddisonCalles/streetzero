@@ -29,9 +29,14 @@ export class GameSpace extends Game {
             this.gameOverScreen()
             return;
         }
+        
         this.context.fillStyle = Colors.background;
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-
+        if (!this.isPlay) {
+            this.context.font = "20px Arial";
+            this.context.fillStyle = 'gray';
+            this.context.fillText('Press Click to Start...', (this.canvas.width / 2) - 100, this.canvas.height / 2);
+          }
         if (this.isPlay) {
             this._player.render();
             this.renderEnemies();
