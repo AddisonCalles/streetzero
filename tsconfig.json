@@ -1,6 +1,13 @@
 {
   // see https://www.typescriptlang.org/tsconfig to better understand tsconfigs
-  "include": ["src", "types", "./src/**/*", "./src/**/*.ts", "./src/*.ts", "./src/**/**/*.ts"],
+  "include": [
+    "src",
+    "types",
+    "./src/**/*",
+    "./src/**/*.ts",
+    "./src/*.ts",
+    "./src/**/**/*.ts"
+  ],
   "compilerOptions": {
     "target": "es2017",
     "module": "commonjs",
@@ -33,6 +40,7 @@
     "forceConsistentCasingInFileNames": true,
     // `tsdx build` ignores this option, but it is commonly used when type-checking separately with `tsc`
     "noEmit": false,
-    "allowJs":true,
+    "allowJs": true,
+    "resolveJsonModule": true
   }
 }
