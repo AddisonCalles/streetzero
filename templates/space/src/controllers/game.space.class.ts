@@ -5,20 +5,19 @@ import { Colors } from "../ui/colors";
 import { QueenShipV1 } from "../kinematics/enemies/queenship.class";
 import { math, Game } from 'streetzero';
 import { Enemy } from "../kinematics/enemies/enemy.class";
+import { inject, injectable } from "tsyringe";
 
+@injectable()
 export class GameSpace extends Game {
-    private _player;
-    #points = 0;
     private _enemies: Enemy[] = [];
     private _levelText = "";
     private _queen = false;
     private _queenLevel = 25;
     private _resetText = `Press click to reset...`;
     private _secondsToReset = 3;
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
-        this._player = new Player(canvas, '#4f83cc', 20, 50, 15);
-        this._player.health.deadEvent.subscribe(() => {
+    constructor(@inject('Player') private player: Player) {
+        super();
+        this.player.health.deadEvent.subscribe(() => {
             super.gameOver = true;
         })
     }
@@ -38,7 +37,7 @@ export class GameSpace extends Game {
             this.context.fillText('Press Click to Start...', (this.canvas.width / 2) - 100, this.canvas.height / 2);
           }
         if (this.isPlay) {
-            this._player.render();
+            this.player.render();
             this.renderEnemies();
             if (this.gameOver) {
                 this.onGameOver();
@@ -71,11 +70,11 @@ export class GameSpace extends Game {
         this._enemies.forEach(enemy => {
             if (!enemy.health.isDead) {
                 enemy.move();
-                if (this._player.isShootedEnemy(enemy)) {
-                    this.#points++;
-                } else if (this._player.hasColision(enemy)) {
+                if (this.player.isShootedEnemy(enemy)) {
+                    this.incrementPoints(1);
+                } else if (this.player.hasColision(enemy)) {
                     enemy.destroy();
-                    this._player.health.reduce(1);
+                    this.player.health.reduce(1);
                 } else {
                     enemy.render();
                 }
@@ -101,7 +100,7 @@ export class GameSpace extends Game {
     }
     onNextLevel() {
         if (this.level % this._queenLevel == 0) {
-            this._enemies.push(new QueenShipV1(this.canvas, this._player));
+            this._enemies.push(new QueenShipV1());
         }
         this.addEnemies(this.level);
     }
@@ -132,12 +131,10 @@ export class GameSpace extends Game {
             } else if (index % 6 == 0) {
                 levelEnemy = EnemyLevels.level3;
             }
-            const enemy = new SmallShip(this.canvas, levelEnemy, (this.canvas.width - 100), math.random(this.canvas.height, 5), this._player);
+            const enemy = new SmallShip(levelEnemy, (this.canvas.width - 100), math.random(this.canvas.height, 5));
             enemy.vector.setVector(1.5 + (this.level / 5), math.random(270, 90));
             this._enemies.push(enemy)
         }
     }
-    get points() { return this.#points; }
     get enemies() { return this._enemies; }
-    get player() { return this._player; }
 }

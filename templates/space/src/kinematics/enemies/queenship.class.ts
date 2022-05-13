@@ -1,5 +1,6 @@
 import { Directions, Kinematic } from 'streetzero';
 import { math } from 'streetzero';
+import { inject } from 'tsyringe';
 import { queenShipV1Drawing } from '../../drawings/enemies/queen-ship.drawing';
 import { EnergyBall } from '../energyball.class';
 import { Player } from '../player.class';
@@ -12,9 +13,8 @@ export class QueenShipV1 extends Enemy {
     _guns;
     _velocity = 1;
 
-    constructor(canvas: HTMLCanvasElement, player: Player) {
-        //super(canvas,(canvas.width / 2)-300, (canvas.height / 2)-300, 300, 300, 50, player);
-        super(canvas, canvas.width - 200, 0, 300, 300, 200, player);
+    constructor() {
+        super(300, 0, 300, 300, 200);
         super.centerOffset();
         super.setLeyers(queenShipV1Drawing('red', this));
         this._guns = [
@@ -34,15 +34,17 @@ export class QueenShipV1 extends Enemy {
         this._energyBalls = this._energyBalls.filter(
             ball => !ball.edgeCollision() && !ball.isDestroy()
         );
+        if (!this.player) return super.render();
         this._energyBalls.forEach(ball => {
             if (ball.hasColision(this.player)) {
-                this.player.health.reduce(1);
+                this.player?.health.reduce(1);
                 ball.destroy();
             } else {
                 ball.move();
                 ball.render();
             }
         });
+
         super.render();
     }
 
@@ -73,7 +75,6 @@ export class QueenShipV1 extends Enemy {
     fire() {
         const indexGun = parseInt(math.random(0, this._guns.length - 0.9).toString());
         const energyBall = new EnergyBall(
-            this.canvas,
             this.x + this._guns[indexGun].x,
             this.y + this._guns[indexGun].y
         );
@@ -85,7 +86,7 @@ export class QueenShipV1 extends Enemy {
         if (!this._gunsRunnerProcess) return super.destroy();
         try {
             clearInterval(this._gunsRunnerProcess);
-        } catch (error) { }
+        } catch (error) {}
         return super.destroy();
     }
 }

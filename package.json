@@ -2,7 +2,7 @@
   "name": "streetzero",
   "author": "Addison Calles",
   "module": "dist/streetzero.esm.js",
-  "version": "0.6.0-alpha.8",
+  "version": "0.7.0-alpha.0",
   "license": "MIT",
   "main": "dist/index.js",
   "bin": "dist/cli/index.js",
@@ -80,6 +80,7 @@
     "istanbul-badges-readme": "^1.8.1",
     "jest": "^27.0.0",
     "jest-canvas-mock": "^2.4.0",
+    "reflect-metadata": "^0.1.13",
     "size-limit": "^7.0.4",
     "ts-jest": "^27.0.0",
     "ts-node": "^10.7.0",
@@ -89,8 +90,8 @@
   },
   "dependencies": {
     "colors": "^1.4.0",
-    "enquirer": "^2.3.6",
     "fs-extra": "^10.1.0",
-    "inquirer": "^8.2.4"
+    "inquirer": "^8.2.4",
+    "tsyringe": "^4.6.0"
   }
 }

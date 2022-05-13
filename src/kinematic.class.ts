@@ -14,14 +14,8 @@ export class Kinematic extends Drawable {
   private _enabledVectorRotation = true;
   private _gravity = 1.5;
   private _enableGravity = true;
-  constructor(
-    canvas: any,
-    x: number,
-    y: number,
-    width: number = 0,
-    height: number = 0
-  ) {
-    super(canvas, x, y, width, height);
+  constructor(x: number, y: number, width: number = 0, height: number = 0) {
+    super(x, y, width, height);
     this._path = new Path2D();
     this._vector.setVector(0, 0);
   }
@@ -68,7 +62,8 @@ export class Kinematic extends Drawable {
     return colisions;
   }
 
-  hasColision(el: Kinematic) {
+  hasColision(el?: Kinematic) {
+    if (!el) return;
     return math.intersectionRectangles(this, el);
   }
 

@@ -163,15 +163,12 @@ Overwrite any of these methods within your MyGame class
 Example Rocket:
 
 ```javascript
-import {
-  Kinematic,
-  LayerPath,
-} from './node_modules/streetzero/dist/streetzero.esm.js';
+import { Kinematic, LayerPath } from 'streetzero';
 export class Rocket extends Kinematic {
   #primaryColor;
-  constructor(canvas, color, x, y) {
+  constructor(color, x, y) {
     Sounds.shoot();
-    super(canvas, x, y, 30, 10);
+    super(x, y, 30, 10);
     this.#primaryColor = color;
     this.initLayer();
   }

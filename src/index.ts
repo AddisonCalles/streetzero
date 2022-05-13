@@ -1,6 +1,6 @@
 
 export { Drawable } from "./drawable.class";
-export { EventListener } from "./eventListener.class";
+export { EventListener } from "./events/eventlistener.class";
 export * as math from "./helpers/math";
 export * as color from "./helpers/color";
 export { Game } from "./game.class";

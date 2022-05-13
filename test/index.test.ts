@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {
   LayerPath as LayerPathTs,
   Drawable as DrawableTs,

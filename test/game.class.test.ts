@@ -1,39 +1,12 @@
+import 'reflect-metadata';
+import { canvas, context2D, reloadDependency } from './mocks/app.mock';
 import 'jest-canvas-mock';
 import 'jest';
 import { Game } from '../src/game.class';
-const canvas = document.createElement('canvas');
-document.body.prepend(canvas);
+import { container } from 'tsyringe';
+import { EventProvider } from '../src/providers';
+import { GameEvents, onGameStart, onGameStop } from '../src/events';
 const startSystemTime = new Date(2022, 3, 1, 22, 40, 23);
-class MockGameBase extends Game {
-  protected onStart?(): void { }
-  protected onStop?(): void { }
-  protected onGameOver?(): void { }
-  protected onFire?(event: any): void {
-    event;
-  }
-  protected onMouseMove?(event: any): void {
-    event;
-  }
-  protected onPreload?(): void { }
-  protected onRender?(): void { }
-  protected onTouchStart?(event: any): void {
-    event;
-  }
-  protected onTouchCancel?(event: any): void {
-    event;
-  }
-  protected onTouchEnd?(event: any): void {
-    event;
-  }
-  protected onNextLevel?(): void { }
-  protected onNexLevelPress?(): void { }
-  protected onKeyDown?(event: any): void {
-    event;
-  }
-  protected onKeyUp?(event: any): void {
-    event;
-  }
-}
 beforeAll(() => {
   jest.useFakeTimers('modern');
   jest.spyOn(global, 'setInterval');
@@ -43,7 +16,7 @@ beforeAll(() => {
 });
 beforeEach(() => {
   jest.setSystemTime(startSystemTime.getTime());
-
+  reloadDependency();
 });
 afterEach(() => {
   jest.clearAllTimers();
@@ -55,7 +28,7 @@ afterAll(() => {
 });
 describe('Unit Tests Game Class', () => {
   test('General Perperties', () => {
-    const game = new MockGameBase(canvas);
+    const game = container.resolve(Game);
     game.speed = 30;
     expect(game.speed).toBe(30);
     expect(game.isPlay).toBeFalsy();
@@ -66,30 +39,29 @@ describe('Unit Tests Game Class', () => {
     expect(game.gameOver).toBeFalsy();
     game.gameOver = true;
     expect(game.gameOver).toBeTruthy();
-    expect(game.context).toBe(canvas.getContext('2d'));
+    expect(game.context).toBe(context2D);
   });
 
   test('Game Start/Stop/Preload Event', () => {
     const testOnStop = jest.fn();
     const testOnStart = jest.fn();
-    const testOnPreload = jest.fn();
-    class MockGame extends MockGameBase {
+    const game = global.resolve(Game);
+
+    class Generic {
+      @onGameStart()
       onStart() {
         testOnStart();
       }
+      @onGameStop()
       onStop() {
         testOnStop();
       }
-      onPreload() {
-        testOnPreload();
-      }
     }
-    var game = new MockGame(canvas);
+    new Generic();
     //Start Step
     game.speed = 20;
     game.start();
-    expect(testOnStart).nthCalledWith(1);
-    expect(testOnPreload).nthCalledWith(1);
+    expect(testOnStart).lastCalledWith({});
     expect(game.initTime).toBe(startSystemTime.getTime());
     expect(game.points).toBe(0);
     expect(game.isPlay).toBeFalsy();
@@ -101,29 +73,12 @@ describe('Unit Tests Game Class', () => {
   });
 
   test('Render Event', () => {
-    const testOnStop = jest.fn();
-    const testOnStart = jest.fn();
-    const testOnGameOver = jest.fn();
-    const testOnPreload = jest.fn();
     const testOnRender = jest.fn();
-    class MockGame extends MockGameBase {
-      onStart() {
-        testOnStart();
-      }
-      onStop() {
-        testOnStop();
-      }
-      onGameOver() {
-        testOnGameOver();
-      }
-      onPreload() {
-        testOnPreload();
-      }
-      onRender() {
-        testOnRender();
-      }
-    }
-    var game = new MockGame(canvas);
+
+    var game = container.resolve(Game);
+    const manager = container.resolve(EventProvider);
+    expect(manager).not.toBeUndefined();
+    manager.on(GameEvents.render, testOnRender);
     //Start Step
     game.speed = 20;
     game.play();
@@ -139,7 +94,7 @@ describe('Unit Tests Game Class', () => {
       currentTime += timeByLoop;
       loops++;
 
-      expect(testOnRender).nthCalledWith(loops);
+      expect(testOnRender).nthCalledWith(loops, {});
       const exact = (loops / game.speed).toFixed();
       const newTime = parseInt(exact);
       expect(game.time).toBe(newTime);
@@ -150,51 +105,25 @@ describe('Unit Tests Game Class', () => {
   test('Levels & Points Events', () => {
     const testOnNextLevel = jest.fn();
     const testOnNexLevelPress = jest.fn();
-    class MockGame extends MockGameBase {
-      onNextLevel() {
-        testOnNextLevel();
-      }
-      onNexLevelPress() {
-        testOnNexLevelPress();
-      }
-      onGameOver() { }
-    }
-    var game = new MockGame(canvas);
+    const game = container.resolve(Game);
+    const manager = container.resolve(EventProvider);
+    expect(manager).not.toBeUndefined();
+    manager.on(GameEvents.nextlevel, testOnNextLevel);
+    manager.on(GameEvents.prenextlevel, testOnNexLevelPress);
     //Next Level
-
     game.nextLevel(0);
-    expect(testOnNexLevelPress).lastCalledWith();
+    expect(testOnNexLevelPress).lastCalledWith({ affter: 0, next: 1 });
+    jest.runOnlyPendingTimers(); //Run intervals
+    expect(testOnNextLevel).lastCalledWith({ level: 1 });
     game.nextLevel(0);
     jest.runOnlyPendingTimers(); //Run intervals
-    expect(testOnNextLevel).lastCalledWith();
+    expect(testOnNextLevel).lastCalledWith({ level: 2 });
     expect(game.level).toBe(2);
     expect(game.clearCanvas()).toBeUndefined();
-    expect(game.onNexLevelPress());
-    expect(game.onNextLevel());
     //Point increce
     game.incrementPoints(40);
     expect(game.points).toBe(40);
     game.incrementPoints(-4);
     expect(game.points).toBe(36);
-    expect(game.onGameOver());
   });
-
-  test('Mouse and key events', () => {
-    const testOnNextLevel = jest.fn();
-    const testOnNexLevelPress = jest.fn();
-    class MockGame extends MockGameBase {
-      onNextLevel() {
-        testOnNextLevel();
-      }
-      onNexLevelPress() {
-        testOnNexLevelPress();
-      }
-    }
-    var game = new MockGame(canvas);
-    //Next Level
-
-    game.nextLevel(0);
-    expect(testOnNexLevelPress).lastCalledWith();
-  });
-
 });

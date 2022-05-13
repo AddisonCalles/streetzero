@@ -1,3 +1,4 @@
+import { container } from 'tsyringe';
 import { angleBetweenPoints } from './helpers/math';
 import { LayerPath } from './layerPath.class';
 
@@ -12,19 +13,13 @@ export class Drawable {
   private _height: number;
   private _rotation: number = 0;
   private _debug: boolean = false;
-  constructor(
-    _canvas: any,
-    _x: number,
-    _y: number,
-    _width: number = 0,
-    _height: number = 0
-  ) {
+  constructor(_x: number, _y: number, _width: number = 0, _height: number = 0) {
     this._width = _width;
     this._height = _height;
     this._x = _x;
     this._y = _y;
-    this._ctx = _canvas.getContext('2d');
-    this._canvas = _canvas;
+    this._canvas = container.resolve<HTMLCanvasElement>('Canvas');
+    this._ctx = container.resolve<CanvasRenderingContext2D>('Context2D');
   }
   setLeyers(layers: LayerPath[]) {
     this._layers = layers;
@@ -43,11 +38,6 @@ export class Drawable {
   setPos(x: number, y: number) {
     this._x = x;
     this._y = y;
-  }
-
-  setCanvas(canvas: any) {
-    this._canvas = canvas;
-    this._ctx = this._canvas.getContext('2d');
   }
   centerOffset() {
     this._offset = { x: this.width / 2, y: this.height / 2 };

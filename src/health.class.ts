@@ -1,4 +1,4 @@
-import { EventListener } from './eventListener.class';
+import { EventListener } from './events/eventlistener.class';
 
 export class Health {
   private _health: number;

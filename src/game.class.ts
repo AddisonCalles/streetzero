@@ -1,10 +1,13 @@
-export abstract class Game {
+import { inject, singleton } from 'tsyringe';
+import { GameEvents } from './events';
+import { EventProvider } from './providers/event.provider';
+
+@singleton()
+export class Game {
   private _play = false;
   private _level = 0;
-  private _context: CanvasRenderingContext2D | null;
   private _points = 0;
   private _mainRunner: any;
-  private _canvas: HTMLCanvasElement;
   private _gameover = false;
   private _fps = 1;
   private _fpsCounter = 0;
@@ -12,58 +15,19 @@ export abstract class Game {
   private _initTime: number = 0;
   private _lastTime: number = 0;
   private _speed: number = 60;
-  constructor(canvas: HTMLCanvasElement) {
-    this._canvas = canvas;
-    this._context = canvas.getContext('2d');
-    this._initMouseEvents();
+  constructor(
+    @inject('Canvas') private _canvas: HTMLCanvasElement,
+    @inject('Context2D') private _context: CanvasRenderingContext2D,
+    @inject(EventProvider) private eventProvider: EventProvider
+  ) {
+    if (!this.eventProvider) throw new Error('Event Provider not found..');
+    this.eventProvider.registry(GameEvents.nextlevel);
+    this.eventProvider.registry(GameEvents.start);
+    this.eventProvider.registry(GameEvents.stop);
+    this.eventProvider.registry(GameEvents.pause);
+    this.eventProvider.registry(GameEvents.render);
+    this.eventProvider.registry(GameEvents.prenextlevel);
   }
-
-  private _initMouseEvents() {
-    const gameRef = this;
-    this._canvas?.addEventListener('click', function (event: any) {
-      gameRef.onFire?.(event);
-    });
-    this._canvas?.addEventListener('mousemove', function (event: any) {
-      gameRef.onMouseMove?.(event);
-    });
-    document?.addEventListener('keydown', function (event: any) {
-      gameRef.onKeyDown?.(event);
-    });
-    document?.addEventListener('keyup', function (event: any) {
-      gameRef.onKeyUp?.(event);
-    });
-    this._canvas?.addEventListener(
-      'touchstart',
-      function (event: any) {
-        gameRef.onTouchStart?.(event);
-      },
-      false
-    );
-    this._canvas?.addEventListener(
-      'touchend',
-      function (event: any) {
-        gameRef.onTouchEnd?.(event);
-      },
-      false
-    );
-    this._canvas?.addEventListener(
-      'touchcancel',
-      function (event: any) {
-        gameRef.onTouchCancel?.(event);
-      },
-      false
-    );
-    this._canvas?.addEventListener('mousedown', function (event: any) {
-      gameRef.onTouchStart?.(event);
-    });
-    this._canvas?.addEventListener('mouseup', function (event: any) {
-      gameRef.onTouchEnd?.(event);
-    });
-    this._canvas?.addEventListener('mouseout', function (event: any) {
-      gameRef.onTouchCancel?.(event);
-    });
-  }
-
   public clearCanvas() {
     if (this._context && this._canvas)
       this._context?.clearRect(0, 0, this._canvas?.width, this._canvas?.height);
@@ -75,21 +39,23 @@ export abstract class Game {
     this._play = false;
   }
   public nextLevel(sleepOffset = 0) {
+    this.eventProvider.emit(GameEvents.prenextlevel, {
+      next: this.level + 1,
+      affter: this.level,
+    });
     this._level++;
-    this.onNexLevelPress?.();
     setTimeout(() => {
-      this.onNextLevel?.();
+      this.eventProvider.emit(GameEvents.nextlevel, { level: this.level });
     }, sleepOffset);
   }
 
   public start() {
-    this.onStart?.();
+    this.eventProvider.emit(GameEvents.start, {});
     this._initTime = new Date().getTime();
-    this.onPreload?.();
     this._mainRunner = setInterval(() => {
       this.clearCanvas();
       this.updateCounters();
-      this.onRender?.();
+      this.eventProvider.emit(GameEvents.render, {});
     }, 1000 / this.speed);
   }
 
@@ -107,28 +73,11 @@ export abstract class Game {
 
   public stop() {
     clearInterval(this._mainRunner);
-    this.onStop?.();
+    this.eventProvider.emit(GameEvents.stop, {});
   }
   public incrementPoints(amount: number = 1) {
     return (this._points += amount);
   }
-
-  //#region Abstracts Methods
-  protected abstract onStart?(): void;
-  protected abstract onStop?(): void;
-  protected abstract onGameOver?(): void;
-  protected abstract onFire?(event: any): void;
-  protected abstract onMouseMove?(event: any): void;
-  protected abstract onPreload?(): void;
-  protected abstract onRender?(): void;
-  protected abstract onTouchStart?(event: any): void;
-  protected abstract onTouchCancel?(event: any): void;
-  protected abstract onTouchEnd?(event: any): void;
-  protected abstract onNextLevel?(): void;
-  protected abstract onNexLevelPress?(): void;
-  protected abstract onKeyDown?(event: any): void;
-  protected abstract onKeyUp?(event: any): void;
-  //#endregion
 
   get gameOver() {
     return this._gameover;
