@@ -6,6 +6,18 @@ export {
   onPreNextLevel,
   onRender,
 } from './game.events';
-export { CanvasEvents } from './canvas.event.types';
+export {
+  onClic,
+  onKeyDown,
+  onKeyUp,
+  onMouseDown,
+  onMouseMove,
+  onMouseOut,
+  onMouseUp,
+  onTouchCancel,
+  onTouchEnd,
+  onTouchStart,
+} from './mouse.events';
+export { MouseEvents } from './mouse.event.types';
 export { GameEvents } from './game.event.types';
 export { EventListener } from './eventlistener.class';

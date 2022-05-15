@@ -1,6 +1,7 @@
 import * as math from './helpers/math';
 import { Drawable } from './drawable.class';
 import { Vector } from './vector.class';
+import { DOMContext, getContext } from './helpers/dom';
 export enum Directions {
   right = 'right',
   left = 'left',
@@ -19,20 +20,21 @@ export class Kinematic extends Drawable {
     this._path = new Path2D();
     this._vector.setVector(0, 0);
   }
-  render(): void {
+  render(dom: DOMContext): void {
+    const { context } = dom;
+    if (!context) return;
     if (this.isDebug) {
-      this.context.fillStyle = 'orange';
-      this.context.font = '10px Arial';
-      this.context.fillText(
+      context.fillStyle = 'orange';
+      context.font = '10px Arial';
+      context.fillText(
         `(Vx:${this.vector.vel.x.toFixed(1)},Vy${this.vector.vel.y.toFixed(
           1
         )}, dir: ${this.vector.dir}, rot: ${this.rotation})`,
         this.x,
         15
       );
-      this.context.fill();
     }
-    super.render();
+    super.render(dom);
   }
 
   /**
@@ -43,17 +45,18 @@ export class Kinematic extends Drawable {
     this._vector.rotateTo(this, element);
   }
   edgeCollision(): Directions[] | false {
+    const { canvas } = getContext();
     const vel = this.vector.vel;
     const colisions: Directions[] = [];
     if (this.x <= 0 && vel.x < 0) {
       colisions.push(Directions.left);
-    } else if (this.x2 >= this.canvas.width && vel.x > 0) {
+    } else if (this.x2 >= canvas.width && vel.x > 0) {
       colisions.push(Directions.right);
     }
     if (this.y <= 0 && vel.y < 0) {
       colisions.push(Directions.top);
     } else if (
-      this.y2 >= this.canvas.height &&
+      this.y2 >= canvas.height &&
       (vel.y > 0 || !this._enableGravity)
     ) {
       colisions.push(Directions.bottom);

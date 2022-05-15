@@ -1,21 +1,8 @@
-import 'jest-canvas-mock';
-import 'reflect-metadata';
-import { reloadDependency } from '../mocks/app.mock';
 import 'jest';
-import '../../src/events/game.events';
-import { container } from 'tsyringe';
-import { EventProvider, MouseEventProvider } from '../../src/providers';
-import {
-  CanvasEvents,
-  GameEvents,
-  onGamePause,
-  onGameStart,
-  onGameStop,
-  onNextLevel,
-  onPreNextLevel,
-  onRender,
-} from '../../src/events';
+import { EventProvider } from '../../src/providers';
+import { MouseEvents, GameEvents } from '../../src/events';
 import { Game } from '../../src';
+import '../mocks/app.mock';
 
 const startSystemTime = new Date(2022, 3, 1, 22, 40, 23);
 beforeAll(() => {
@@ -26,7 +13,6 @@ beforeEach(() => {
 });
 afterEach(() => {
   jest.clearAllTimers();
-  reloadDependency();
   return;
 });
 afterAll(() => {
@@ -34,33 +20,9 @@ afterAll(() => {
   return;
 });
 describe('Unit Tests Game Class', () => {
-  test('Event Provider test', () => {
-    const provider = new EventProvider();
-    expect(provider.registry('test-event')).toBeUndefined();
-    expect(provider.find('test-event')).not.toBeUndefined();
-    const eventCallback = jest.fn();
-    expect(provider.on('test-event', eventCallback));
-    expect(provider.keys.includes('test-event')).toBeTruthy();
-    const data = { data: 'data-test-event' };
-    provider.emit('test-event', data);
-    expect(eventCallback).lastCalledWith(data);
-    expect(eventCallback).nthCalledWith(1, data);
-  });
-  test('Event Provider with container test', () => {
-    const provider = container.resolve(EventProvider);
-    expect(provider.registry('test-event')).toBeUndefined();
-    expect(provider.find('test-event')).not.toBeUndefined();
-    const eventCallback = jest.fn();
-    expect(provider.on('test-event', eventCallback));
-    const data = { data: 'data-test-event' };
-    provider.emit('test-event', data);
-    expect(eventCallback).lastCalledWith(data);
-    expect(eventCallback).nthCalledWith(1, data);
-  });
-
   test('Event Game Inicialization test', () => {
-    const game = container.resolve(Game);
-    const provider = container.resolve(EventProvider);
+    const game = Game.getInstance(true);
+    const provider = EventProvider.getInstance();
     game;
     expect(provider.find(GameEvents.stop)).not.toBeUndefined();
     expect(provider.find(GameEvents.start)).not.toBeUndefined();
@@ -70,75 +32,88 @@ describe('Unit Tests Game Class', () => {
   });
 
   test('Canvas Events Inicialization test', () => {
-    const { manager } = container.resolve(MouseEventProvider);
-
-    expect(manager.find(CanvasEvents.click)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.keydown)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.keyup)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.mousedown)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.mousemove)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.mouseout)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.mouseup)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.touchcancel)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.touchend)).not.toBeUndefined();
-    expect(manager.find(CanvasEvents.touchstart)).not.toBeUndefined();
+    Game.getInstance(true);
+    const manager = EventProvider.getInstance();
+    expect(manager.find(MouseEvents.clic)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.keydown)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.keyup)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.mousedown)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.mousemove)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.mouseout)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.mouseup)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.touchcancel)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.touchend)).not.toBeUndefined();
+    expect(manager.find(MouseEvents.touchstart)).not.toBeUndefined();
   });
 
-  test('Canvas Mouse Events Test', () => {
-    reloadDependency();
+  test('Game Decorator Events Test', () => {
     const eventGameStart = jest.fn();
     const eventGamePause = jest.fn();
     const eventGameStop = jest.fn();
     const eventPreNextLevel = jest.fn();
     const eventNextLevel = jest.fn();
     const eventRender = jest.fn();
-
-    const game = container.resolve(Game);
+    const provider = EventProvider.getInstance();
+    const game = Game.getInstance(true);
     game;
     class Generic {
-      @onGameStart()
-      eventStart(): void {
-        eventGameStart();
+      constructor() {
+        const provider = EventProvider.getInstance();
+        provider.on(GameEvents.nextlevel, data => this.eventNextLevel(data));
+        provider.on(GameEvents.start, data => this.eventStart(data));
+        provider.on(GameEvents.stop, data => this.eventGameStop(data));
+        provider.on(GameEvents.render, data => this.eventRender(data));
+        provider.on(GameEvents.pause, data => this.eventPause(data));
+        provider.on(GameEvents.prenextlevel, data =>
+          this.eventPreNextLevel(data)
+        );
       }
-      @onGamePause()
-      eventPause(): void {
-        eventGamePause();
+
+      eventStart(data: any): void {
+        console.log('eventStart', data);
+        eventGameStart(data);
       }
-      @onGameStop()
-      eventGameStop() {
-        eventGameStop();
+      eventPause(data: any): void {
+        eventGamePause(data);
       }
-      @onNextLevel()
-      eventNextLevel() {
-        eventNextLevel();
+      eventGameStop(data: any) {
+        eventGameStop(data);
       }
-      @onPreNextLevel()
-      eventPreNextLevel() {
-        eventPreNextLevel();
+      eventNextLevel(data: any) {
+        eventNextLevel(data);
       }
-      @onRender()
-      eventRender() {
-        eventRender();
+      eventPreNextLevel(data: any) {
+        eventPreNextLevel(data);
+      }
+      eventRender(data: any) {
+        eventRender(data);
       }
     }
 
-    new Generic();
-    const { manager } = container.resolve(MouseEventProvider);
-    const data = { data: 'data-test' };
-    expect(manager).not.toBeUndefined();
-    expect(manager.registry(GameEvents.start)).toThrow(
-      `Duplicate Event: ${GameEvents.start}`
-    );
-    expect(manager.find(GameEvents.start)).not.toBeUndefined();
-    expect(manager.find(GameEvents.stop)).not.toBeUndefined();
-    expect(manager.find(GameEvents.pause)).not.toBeUndefined();
-    expect(manager.find(GameEvents.nextlevel)).not.toBeUndefined();
-    expect(manager.find(GameEvents.render)).not.toBeUndefined();
+    const generic = new Generic();
+    generic;
 
-    expect(eventGameStart).nthReturnedWith(1, data);
-    expect(eventGamePause).nthReturnedWith(1, data);
-    expect(eventGameStop).nthCalledWith(1, data);
-    expect(eventNextLevel).nthCalledWith(1, data);
-    expect(eventRender).nthCalledWith(1, data);
+    const data = { data: 'data-test' };
+    expect(provider).not.toBeUndefined();
+    expect(() =>
+      provider.registry<{ data: string }>(GameEvents.start)
+    ).toThrowError(new Error(`Duplicate Event: ${GameEvents.start}`));
+    expect(provider.find(GameEvents.stop)).not.toBeUndefined();
+    expect(provider.find(GameEvents.start)).not.toBeUndefined();
+    expect(provider.find(GameEvents.pause)).not.toBeUndefined();
+    expect(provider.find(GameEvents.nextlevel)).not.toBeUndefined();
+    expect(provider.find(GameEvents.render)).not.toBeUndefined();
+
+    provider.emit(GameEvents.stop, data);
+    provider.emit(GameEvents.start, data);
+    provider.emit(GameEvents.pause, data);
+    provider.emit(GameEvents.nextlevel, data);
+    provider.emit(GameEvents.render, data);
+
+    expect(eventGameStart).lastCalledWith(data);
+    expect(eventGamePause).lastCalledWith(data);
+    expect(eventGameStop).lastCalledWith(data);
+    expect(eventNextLevel).lastCalledWith(data);
+    expect(eventRender).lastCalledWith(data);
   });
 });

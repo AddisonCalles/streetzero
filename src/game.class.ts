@@ -1,9 +1,9 @@
-import { inject, singleton } from 'tsyringe';
 import { GameEvents } from './events';
+import { DOMContext, getContext } from './helpers/dom';
+import { MouseEventProvider } from './providers';
 import { EventProvider } from './providers/event.provider';
-
-@singleton()
 export class Game {
+  private static instance: Game | null = null;
   private _play = false;
   private _level = 0;
   private _points = 0;
@@ -15,47 +15,80 @@ export class Game {
   private _initTime: number = 0;
   private _lastTime: number = 0;
   private _speed: number = 60;
-  constructor(
-    @inject('Canvas') private _canvas: HTMLCanvasElement,
-    @inject('Context2D') private _context: CanvasRenderingContext2D,
-    @inject(EventProvider) private eventProvider: EventProvider
-  ) {
-    if (!this.eventProvider) throw new Error('Event Provider not found..');
-    this.eventProvider.registry(GameEvents.nextlevel);
-    this.eventProvider.registry(GameEvents.start);
-    this.eventProvider.registry(GameEvents.stop);
-    this.eventProvider.registry(GameEvents.pause);
-    this.eventProvider.registry(GameEvents.render);
-    this.eventProvider.registry(GameEvents.prenextlevel);
+  private constructor(reset: boolean = false) {
+    this.initCanvas();
+    EventProvider.getInstance(reset);
+    MouseEventProvider.getInstance(reset);
+    this._initEventRegistry();
+  }
+
+  public static getInstance(reload: boolean = false) {
+    if (Game.instance == null || reload) {
+      Game.instance = new Game(reload);
+    }
+    return Game.instance;
+  }
+
+  private _initEventRegistry() {
+    //if (Game.EventRegistry) return;
+    //if (!this.provider.keys.includes(GameEvents.nextlevel))
+    EventProvider.getInstance().registry<any>(GameEvents.nextlevel);
+    //if (!EventProvider.getInstance().keys.includes(GameEvents.start))
+    EventProvider.getInstance().registry(GameEvents.start);
+    //if (!EventProvider.getInstance().keys.includes(GameEvents.stop))
+    EventProvider.getInstance().registry(GameEvents.stop);
+    //if (!EventProvider.getInstance().keys.includes(GameEvents.pause))
+    EventProvider.getInstance().registry(GameEvents.pause);
+    //if (!EventProvider.getInstance().keys.includes(GameEvents.render))
+    EventProvider.getInstance().registry(GameEvents.render);
+    //if (!EventProvider.getInstance().keys.includes(GameEvents.prenextlevel))
+    EventProvider.getInstance().registry(GameEvents.prenextlevel);
+    //Game.EventRegistry = true;
   }
   public clearCanvas() {
-    if (this._context && this._canvas)
-      this._context?.clearRect(0, 0, this._canvas?.width, this._canvas?.height);
+    let { canvas, context } = getContext();
+    if (context && canvas)
+      context?.clearRect(0, 0, canvas?.width, canvas?.height);
   }
   public play() {
     this._play = true;
   }
   public pause() {
     this._play = false;
+    EventProvider.getInstance().emit(GameEvents.pause, getContext());
   }
   public nextLevel(sleepOffset = 0) {
-    this.eventProvider.emit(GameEvents.prenextlevel, {
+    const data: PreNextLevelEvent = {
       next: this.level + 1,
       affter: this.level,
-    });
+      domContext: getContext(),
+    };
+    EventProvider.getInstance().emit(GameEvents.prenextlevel, data);
     this._level++;
     setTimeout(() => {
-      this.eventProvider.emit(GameEvents.nextlevel, { level: this.level });
+      const data: NextLevelEvent = {
+        level: this.level,
+        domContext: getContext(),
+      };
+      EventProvider.getInstance().emit(GameEvents.nextlevel, data);
     }, sleepOffset);
   }
 
+  private initCanvas() {
+    let { canvas } = getContext();
+    if (!canvas || !window) return;
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+
   public start() {
-    this.eventProvider.emit(GameEvents.start, {});
+    const domContext = getContext();
+    EventProvider.getInstance().emit(GameEvents.start, domContext);
     this._initTime = new Date().getTime();
     this._mainRunner = setInterval(() => {
       this.clearCanvas();
       this.updateCounters();
-      this.eventProvider.emit(GameEvents.render, {});
+      EventProvider.getInstance().emit(GameEvents.render, domContext);
     }, 1000 / this.speed);
   }
 
@@ -73,12 +106,11 @@ export class Game {
 
   public stop() {
     clearInterval(this._mainRunner);
-    this.eventProvider.emit(GameEvents.stop, {});
+    EventProvider.getInstance().emit(GameEvents.stop, getContext());
   }
   public incrementPoints(amount: number = 1) {
     return (this._points += amount);
   }
-
   get gameOver() {
     return this._gameover;
   }
@@ -109,10 +141,14 @@ export class Game {
   get speed() {
     return this._speed;
   }
-  get context() {
-    return this._context;
-  }
-  get canvas() {
-    return this._canvas;
-  }
+}
+
+export interface NextLevelEvent {
+  level: number;
+  domContext: DOMContext;
+}
+export interface PreNextLevelEvent {
+  next: number;
+  affter: number;
+  domContext: DOMContext;
 }

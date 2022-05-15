@@ -1,11 +1,9 @@
-import { container } from 'tsyringe';
+import { DOMContext } from './helpers/dom';
 import { angleBetweenPoints } from './helpers/math';
 import { LayerPath } from './layerPath.class';
 
 export class Drawable {
-  private _ctx: any;
   private _offset = { x: 0, y: 0 };
-  private _canvas: any;
   private _layers: LayerPath[] = [];
   private _x: number;
   private _y: number;
@@ -18,8 +16,6 @@ export class Drawable {
     this._height = _height;
     this._x = _x;
     this._y = _y;
-    this._canvas = container.resolve<HTMLCanvasElement>('Canvas');
-    this._ctx = container.resolve<CanvasRenderingContext2D>('Context2D');
   }
   setLeyers(layers: LayerPath[]) {
     this._layers = layers;
@@ -42,24 +38,26 @@ export class Drawable {
   centerOffset() {
     this._offset = { x: this.width / 2, y: this.height / 2 };
   }
-  render() {
-    this.context.beginPath();
+  render(dom: DOMContext) {
+    const { canvas, context } = dom;
+    if (!context || !canvas) return;
+    context.beginPath();
     this._layers.forEach(layer => {
-      layer.render();
+      layer.render(dom);
     });
     if (this._debug) {
-      this.context.fillStyle = 'orange';
-      this.context.font = '10px Arial';
-      this.context.fillText(
+      context.fillStyle = 'orange';
+      context.font = '10px Arial';
+      context.fillText(
         `(${this.x.toFixed()},${this.y.toFixed(0)})`,
         this.x - 10,
         this.y - 10
       );
-      this.context.strokeStyle = 'gray';
-      this.context.strokeRect(this.x, this.y, this.width, this.height);
-      this.context.beginPath();
-      this.context.arc(this.x, this.y, 4, 0, Math.PI * 2);
-      this.context.fill();
+      context.strokeStyle = 'gray';
+      context.strokeRect(this.x, this.y, this.width, this.height);
+      context.beginPath();
+      context.arc(this.x, this.y, 4, 0, Math.PI * 2);
+      context.fill();
     }
   }
   public enableDebug() {
@@ -67,12 +65,6 @@ export class Drawable {
   }
   public get isDebug() {
     return this._debug;
-  }
-  public get context(): any {
-    return this._ctx;
-  }
-  get canvas() {
-    return this._canvas;
   }
   get x() {
     return this._x + this._offset.x;

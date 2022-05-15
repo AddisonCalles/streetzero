@@ -1,16 +1,16 @@
-export class EventListener {
+export class EventListener<T> {
   private _listeners: Function[] = [];
   constructor() {}
-  subscribe(listener: Function): boolean {
+  subscribe(listener: (data: T) => void): boolean {
     if (this._listeners.includes(listener)) return false;
     this._listeners.push(listener);
     return true;
   }
 
-  unsubscribe(listener: Function) {
+  unsubscribe(listener: (data: T) => void) {
     this._listeners = this._listeners.filter(inlist => inlist !== listener);
   }
-  emit(params: any) {
+  emit(params: T) {
     this._listeners.forEach(listener => listener(params));
   }
 }

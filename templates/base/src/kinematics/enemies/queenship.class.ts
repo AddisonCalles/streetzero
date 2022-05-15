@@ -1,9 +1,7 @@
-import { Directions, Kinematic } from 'streetzero';
-import { math } from 'streetzero';
-import { inject } from 'tsyringe';
+import { Directions, DOMContext, Kinematic } from 'streetzero';
+import { math, dom } from 'streetzero';
 import { queenShipV1Drawing } from '../../drawings/enemies/queen-ship.drawing';
 import { EnergyBall } from '../energyball.class';
-import { Player } from '../player.class';
 import { Enemy } from './enemy.class';
 
 export class QueenShipV1 extends Enemy {
@@ -30,25 +28,26 @@ export class QueenShipV1 extends Enemy {
         this.gunsRunner();
     }
 
-    render() {
+    render(dom: DOMContext) {
         this._energyBalls = this._energyBalls.filter(
             ball => !ball.edgeCollision() && !ball.isDestroy()
         );
-        if (!this.player) return super.render();
+        if (!this.player) return super.render(dom);
         this._energyBalls.forEach(ball => {
             if (ball.hasColision(this.player)) {
                 this.player?.health.reduce(1);
                 ball.destroy();
             } else {
                 ball.move();
-                ball.render();
+                ball.render(dom);
             }
         });
 
-        super.render();
+        super.render(dom);
     }
 
     move() {
+        const { canvas } = dom.getContext();
         const colision = super.edgeCollision();
         if (colision) {
             if (colision.includes(Directions.bottom) || colision.includes(Directions.top)) {
@@ -57,10 +56,10 @@ export class QueenShipV1 extends Enemy {
         } else if (this.vector.vel.y == 0) {
             super.vector.setVelXY(0, this._velocity);
         }
-        if (this.vector.vel.x == 0 && this.x2 > this.canvas.width - this.canvas.width * 0.1) {
+        if (this.vector.vel.x == 0 && this.x2 > canvas.width - canvas.width * 0.1) {
             super.vector.setVector(this._velocity, math.random(230, 150));
         }
-        if (this.vector.vel.x != 0 && this.x2 < this.canvas.width - this.canvas.width * 0.1) {
+        if (this.vector.vel.x != 0 && this.x2 < canvas.width - canvas.width * 0.1) {
             super.vector.setVelXY(0, this._velocity);
         }
         super.move();

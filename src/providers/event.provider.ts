@@ -1,21 +1,49 @@
-import { singleton } from 'tsyringe';
 import { EventListener } from '../events/eventlistener.class';
 
-@singleton()
 export class EventProvider {
-  constructor() {
-    console.log('Start EventProvider');
+  private static instance: EventProvider | null = null;
+  private static events: EventRegistry[] = [];
+  private constructor() {}
+  static getInstance(reload: boolean = false) {
+    if (EventProvider.instance == null || reload) {
+      this.events = [];
+      EventProvider.instance = new EventProvider();
+    }
+    return EventProvider.instance;
   }
-  private events: EventRegistry[] = [];
-  public on(name: string, event: Function) {
-    this.findListener(name).subscribe(event);
+  static reset() {
+    this.instance = new EventProvider();
   }
-  public registry(name: string) {
-    if (this.find(name)) throw new Error(`Duplicate Event: ${name}`);
-    this.events.push({ name, event: new EventListener() });
+  public on<T>(name: string, event: (data: T) => void) {
+    if (!this.hasOrRegistry(name, event)) return;
+    EventProvider.events.map(e => {
+      if (e.name.toString() == name.toString()) {
+        e.event.subscribe(event);
+      }
+      return e;
+    });
+  }
+  public registry<T>(name: string) {
+    if (this.keys.includes(name)) throw new Error(`Duplicate Event: ${name}`);
+    const event = new EventListener<T>();
+    const data: EventRegistry = { name, event };
+    EventProvider.events.push(data);
+  }
+  public hasOrRegistry<T>(
+    name: string,
+    eventCallback: (data: T) => void
+  ): boolean {
+    if (this.keys.includes(name)) return true;
+    const event = new EventListener<T>();
+    event.subscribe(eventCallback);
+    const data: EventRegistry = { name, event };
+    EventProvider.events.push(data);
+    return false;
   }
   public find(event: string) {
-    return this.events.find(reg => reg.name.toString() == event.toString());
+    return EventProvider.events.find(
+      reg => reg.name.toString() == event.toString()
+    );
   }
   public emit(event: string, data: any) {
     this.findListener(event).emit(data);
@@ -28,11 +56,15 @@ export class EventProvider {
     return eventListenner;
   }
   public get keys() {
-    return this.events.map(l => l.name);
+    return EventProvider.events.map(l => l.name);
+  }
+
+  public clear() {
+    EventProvider.events = [];
   }
 }
 
 export interface EventRegistry {
   name: string;
-  event: EventListener;
+  event: EventListener<any>;
 }

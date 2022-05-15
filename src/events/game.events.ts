@@ -1,36 +1,22 @@
-import { container } from 'tsyringe';
-import { EventProvider } from '../providers/event.provider';
 import { GameEvents } from './game.event.types';
+import { eventRegister } from './onevents';
 
-const provider = container?.resolve(EventProvider);
 export function onGameStart() {
-  return function(target: any, propertyKey: string) {
-    provider?.on(GameEvents.start, target[propertyKey]);
-    //descriptor.enumerable = value;
-  };
+  return eventRegister(GameEvents.start);
+  //descriptor.enumerable = value;
 }
 export function onGameStop() {
-  return function(target: any, propertyKey: string) {
-    provider?.on(GameEvents.stop, target[propertyKey]);
-  };
+  return eventRegister(GameEvents.stop);
 }
 export function onNextLevel() {
-  return function(target: any, propertyKey: string) {
-    provider?.on(GameEvents.nextlevel, target[propertyKey]);
-  };
+  return eventRegister(GameEvents.nextlevel);
 }
 export function onPreNextLevel() {
-  return function(target: any, propertyKey: string) {
-    provider?.on(GameEvents.prenextlevel, target[propertyKey]);
-  };
+  return eventRegister(GameEvents.prenextlevel);
 }
 export function onGamePause() {
-  return function(target: any, propertyKey: string) {
-    provider?.on(GameEvents.pause, target[propertyKey]);
-  };
+  return eventRegister(GameEvents.pause);
 }
 export function onRender() {
-  return function(target: any, propertyKey: string) {
-    provider?.on(GameEvents.render, target[propertyKey]);
-  };
+  return eventRegister(GameEvents.render);
 }

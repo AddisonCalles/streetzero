@@ -1,7 +1,7 @@
 import 'reflect-metadata';
 import 'jest-canvas-mock';
 import 'jest';
-import { canvas } from './mocks/app.mock';
+import { canvas, context2D } from './mocks/app.mock';
 import { Directions, Kinematic } from '../src/kinematic.class';
 let kinematic: Kinematic;
 const width = 50;
@@ -26,7 +26,6 @@ afterAll(() => {
 });
 describe('Unit Tests Kinematic Class', () => {
   test('General Perperties', () => {
-    expect(kinematic.canvas).toBe(canvas);
     expect(kinematic.x).toBe(0);
     expect(kinematic.y).toBe(0);
     expect(kinematic.x2).toBe(50);
@@ -43,10 +42,10 @@ describe('Unit Tests Kinematic Class', () => {
     expect(kinematic.offset.y).toBe(20);
     expect(kinematic.isDebug).toBeFalsy();
     expect(kinematic.enableDebug()).toBeUndefined();
-    expect(kinematic.render()).toBeUndefined();
     expect(kinematic.isDestroy()).toBeFalsy();
     expect(kinematic.destroy()).toBeUndefined();
     expect(kinematic.isDestroy()).toBeTruthy();
+    expect(kinematic.render({ canvas, context: context2D })).toBeUndefined();
   });
   test('rotateToVectorial', () => {
     expect(

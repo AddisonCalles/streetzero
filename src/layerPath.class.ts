@@ -1,3 +1,4 @@
+import { DOMContext } from './helpers/dom';
 import { Kinematic } from './kinematic.class';
 
 export class LayerPath {
@@ -33,14 +34,15 @@ export class LayerPath {
     );
   }
 
-  render() {
+  render({ context }: DOMContext) {
+    if (!context) return;
     const rotation =
       this.rotation +
       this._element.rotation +
       (this._element.enabledVectorRotation ? this._element.vector.dir : 0);
     this.rotate(rotation);
-    this._element.context.fillStyle = this.color;
-    this._element.context.fill(this._path);
+    context.fillStyle = this.color;
+    context.fill(this._path);
   }
 
   get rotation() {
