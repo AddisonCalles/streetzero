@@ -1,21 +1,19 @@
-import 'jest-canvas-mock';
 import 'jest';
+import { canvas } from './mocks/app.mock';
 import { Game } from '../src/game.class';
-const canvas = document.createElement('canvas');
-document.body.prepend(canvas);
 const startSystemTime = new Date(2022, 3, 1, 22, 40, 23);
 class MockGameBase extends Game {
-  protected onStart?(): void { }
-  protected onStop?(): void { }
-  protected onGameOver?(): void { }
+  protected onStart?(): void {}
+  protected onStop?(): void {}
+  protected onGameOver?(): void {}
   protected onFire?(event: any): void {
     event;
   }
   protected onMouseMove?(event: any): void {
     event;
   }
-  protected onPreload?(): void { }
-  protected onRender?(): void { }
+  protected onPreload?(): void {}
+  protected onRender?(): void {}
   protected onTouchStart?(event: any): void {
     event;
   }
@@ -25,8 +23,8 @@ class MockGameBase extends Game {
   protected onTouchEnd?(event: any): void {
     event;
   }
-  protected onNextLevel?(): void { }
-  protected onNexLevelPress?(): void { }
+  protected onNextLevel?(): void {}
+  protected onNexLevelPress?(): void {}
   protected onKeyDown?(event: any): void {
     event;
   }
@@ -43,7 +41,6 @@ beforeAll(() => {
 });
 beforeEach(() => {
   jest.setSystemTime(startSystemTime.getTime());
-
 });
 afterEach(() => {
   jest.clearAllTimers();
@@ -157,7 +154,7 @@ describe('Unit Tests Game Class', () => {
       onNexLevelPress() {
         testOnNexLevelPress();
       }
-      onGameOver() { }
+      onGameOver() {}
     }
     var game = new MockGame(canvas);
     //Next Level
@@ -196,5 +193,4 @@ describe('Unit Tests Game Class', () => {
     game.nextLevel(0);
     expect(testOnNexLevelPress).lastCalledWith();
   });
-
 });

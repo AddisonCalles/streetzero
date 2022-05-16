@@ -1,8 +1,9 @@
 
 export { Drawable } from "./drawable.class";
-export { EventListener } from "./eventListener.class";
+export { EventListener, GameEvents, UIEvents } from "./events";
 export * as math from "./helpers/math";
 export * as color from "./helpers/color";
+export{getContext} from "./helpers/dom";
 export { Game } from "./game.class";
 export { Health } from "./health.class";
 export  { Kinematic, Directions} from "./kinematic.class";

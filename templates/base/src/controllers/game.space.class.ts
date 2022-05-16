@@ -132,7 +132,7 @@ export class GameSpace extends Game {
             } else if (index % 6 == 0) {
                 levelEnemy = EnemyLevels.level3;
             }
-            const enemy = new SmallShip(this.canvas, levelEnemy, (this.canvas.width - 100), math.random(this.canvas.height, 5), this._player);
+            const enemy = new SmallShip(this.canvas, levelEnemy, (this.canvas.width - 100), math.random(this.canvas.height-50, 50), this._player);
             enemy.vector.setVector(1.5 + (this.level / 5), math.random(270, 90));
             this._enemies.push(enemy)
         }

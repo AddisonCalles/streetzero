@@ -6,7 +6,7 @@
 
 | Statements                                                                            | Branches                                                                       | Functions                                                                        | Lines                                                                       |
 | ------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------ | -------------------------------------------------------------------------------- | --------------------------------------------------------------------------- |
-| ![Statements](https://img.shields.io/badge/statements-81.98%25-yellow.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-66.95%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-71.42%25-red.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-81.81%25-yellow.svg?style=flat) |
+| ![Statements](https://img.shields.io/badge/statements-81.3%25-yellow.svg?style=flat) | ![Branches](https://img.shields.io/badge/branches-58.06%25-red.svg?style=flat) | ![Functions](https://img.shields.io/badge/functions-82.87%25-yellow.svg?style=flat) | ![Lines](https://img.shields.io/badge/lines-80.84%25-yellow.svg?style=flat) |
 
 This package is in construction.
 

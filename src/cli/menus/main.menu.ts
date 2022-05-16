@@ -1,3 +1,4 @@
+/* istanbul ignore file */
 import { prompt, QuestionCollection } from 'inquirer';
 import 'colors';
 import { Action } from '../actions';
