@@ -1,10 +1,12 @@
 
+import 'reflect-metadata';
 export { Drawable } from "./drawable.class";
-export { EventListener, GameEvents, UIEvents } from "./events";
+export { EventListener } from "./eventlistener.class";
+export { Controller } from "./core/controller.decorator";
 export * as math from "./helpers/math";
 export * as color from "./helpers/color";
 export{getContext} from "./helpers/dom";
-export { Game } from "./game.class";
+export {MainGame as Game }  from "./core/game.class";
 export { Health } from "./health.class";
 export  { Kinematic, Directions} from "./kinematic.class";
 export { LayerPath} from "./layerPath.class";

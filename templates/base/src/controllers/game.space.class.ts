@@ -1,13 +1,15 @@
+import { math, Controller, DOMContext, Game } from 'streetzero';
 import { SmallShip, EnemyLevels } from "../kinematics/enemies/smallShip.class";
 import { Sounds } from "../resources/sounds.class";
 import { Player } from "../kinematics/player.class";
 import { Colors } from "../ui/colors";
 import { QueenShipV1 } from "../kinematics/enemies/queenship.class";
-import { math, Game } from 'streetzero';
 import { Enemy } from "../kinematics/enemies/enemy.class";
 
-export class GameSpace extends Game {
-    private _player;
+
+@Controller()
+export class GameSpace {
+    private _player: Player;
     #points = 0;
     private _enemies: Enemy[] = [];
     private _levelText = "";
@@ -15,32 +17,36 @@ export class GameSpace extends Game {
     private _queenLevel = 25;
     private _resetText = `Press click to reset...`;
     private _secondsToReset = 3;
-    constructor(canvas: HTMLCanvasElement) {
-        super(canvas);
+    private game: Game;
+    private context: CanvasRenderingContext2D | null;
+    private canvas: DOMContext;
+    constructor({context, canvas}: DOMContext, game: Game) {
+        this.context = context;
+        this.canvas = canvas;
         this._player = new Player(canvas, '#4f83cc', 20, 50, 15);
         this._player.health.deadEvent.subscribe(() => {
-            super.gameOver = true;
+            game.gameOver = true;
         })
     }
 
     onRender() {
         if (!this.context) return;
-        if (this.gameOver) {
+        if (this.game.gameOver) {
             this.gameOverScreen()
             return;
         }
         
         this.context.fillStyle = Colors.background;
         this.context.fillRect(0, 0, this.canvas.width, this.canvas.height);
-        if (!this.isPlay) {
+        if (!this.game.isPlay) {
             this.context.font = "20px Arial";
             this.context.fillStyle = 'gray';
             this.context.fillText('Press Click to Start...', (this.canvas.width / 2) - 100, this.canvas.height / 2);
           }
-        if (this.isPlay) {
+        if (this.game.isPlay) {
             this._player.render();
             this.renderEnemies();
-            if (this.gameOver) {
+            if (this.canvas.gameOver) {
                 this.onGameOver();
             }
             if (this._levelText != '') {
@@ -53,9 +59,9 @@ export class GameSpace extends Game {
         }
     }
     onFire() {
-        if (!this.isPlay) {
-            this.play();
-        } else if (this.gameOver) {
+        if (!this.game.isPlay) {
+            this.game.play();
+        } else if (this.game.gameOver) {
             this.reset();
         } else {
             this.player.fire();
