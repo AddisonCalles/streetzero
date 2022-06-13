@@ -2,13 +2,7 @@ import { Health, Kinematic, LayerPath } from 'streetzero';
 export class Ship2 extends Kinematic {
     private _color;
     private _health;
-    constructor(
-        _canvas: HTMLCanvasElement,
-        _color: string,
-        _x: number,
-        _y: number,
-        _health: number
-    ) {
+    constructor(_canvas: HTMLCanvasElement, _color: string, _x: number, _y: number, _health: number) {
         super(_canvas, _x, _y, 30, 30);
         this._health = new Health(_health);
         this._color = _color;

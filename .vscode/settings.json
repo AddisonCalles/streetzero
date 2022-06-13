@@ -1,4 +1,10 @@
 {
-    "liveServer.settings.multiRootWorkspaceName": "streetzero",
-    "editor.formatOnSave": true
+    "editor.formatOnSave": true,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "editor.codeActionsOnSave": {
+        "source.fixAll": true,
+        "source.organizeImports": true,
+        "source.sortMembers": true
+    },
+    "prettier.configPath": ".prettierrc.json"
 }

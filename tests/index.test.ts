@@ -8,7 +8,7 @@ import {
   Health as HealthTs,
   math as mathTs,
   color as colorTs,
-  Game as GameTs,
+  zGame as zGameTs,
   Directions as DirectionsTs,
 } from '../src/index';
 import {
@@ -21,7 +21,7 @@ import {
   Health,
   math,
   color,
-  Game,
+  zGame,
   Directions,
 } from '../dist/index.js';
 test('Module exports compilation TS', () => {
@@ -34,6 +34,6 @@ test('Module exports compilation TS', () => {
   expect(typeof Health).toBe(typeof HealthTs);
   expect(typeof math).toBe(typeof mathTs);
   expect(typeof color).toBe(typeof colorTs);
-  expect(typeof Game).toBe(typeof GameTs);
+  expect(typeof zGame).toBe(typeof zGameTs);
   expect(typeof Directions).toBe(typeof DirectionsTs);
 });

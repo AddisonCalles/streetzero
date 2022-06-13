@@ -1,7 +1,7 @@
 import path from 'path';
 
 export default {
-    entry: './src/main.ts',
+    entry: './src/index.ts',
     devtool: 'inline-source-map',
     module: {
         rules: [

@@ -1,17 +1,9 @@
-import { Drawable } from 'streetzero';
-import { Health } from 'streetzero';
+import { Drawable, Health } from 'streetzero';
 
 export class HealthBar extends Drawable {
     private _health;
 
-    constructor(
-        canvas: HTMLCanvasElement,
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        health: Health
-    ) {
+    constructor(canvas: HTMLCanvasElement | null, x: number, y: number, width: number, height: number, health: Health) {
         super(canvas, x, y, width, height);
         this._health = health;
     }
@@ -29,11 +21,7 @@ export class HealthBar extends Drawable {
         this.context.fillRect(this.x + border, this.y + border, widthLife, this.height);
         this.context.fillStyle = 'orange';
         this.context.font = `${font}px Arial`;
-        this.context.fillText(
-            `${parseInt(((this.health.current / this.health.total) * 100).toString())}%`,
-            this.x,
-            this.y + height + 10
-        );
+        this.context.fillText(`${parseInt(((this.health.current / this.health.total) * 100).toString())}%`, this.x, this.y + height + 10);
     }
     get health() {
         return this._health;

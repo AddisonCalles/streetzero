@@ -1,4 +1,4 @@
-import { Kinematic, LayerPath, math, color } from 'streetzero';
+import { color, Kinematic, LayerPath, math } from 'streetzero';
 import { Sounds } from '../resources/sounds.class';
 
 export class EnergyBall extends Kinematic {
@@ -16,17 +16,7 @@ export class EnergyBall extends Kinematic {
     initLayer() {
         const ball = new Path2D();
         ball.ellipse(15, 15, 10, 10, 0, 0, Math.PI * 2);
-        super.setLeyers([
-            new LayerPath(ball, this._color[0], this),
-            ...this.makeFlame(0, 7),
-            ...this.makeFlame(90, 7),
-            ...this.makeFlame(180, 7),
-            ...this.makeFlame(270, 7),
-            ...this.makeFlame(45, 5),
-            ...this.makeFlame(90 + 45, 5),
-            ...this.makeFlame(180 + 45, 5),
-            ...this.makeFlame(270 + 45, 5),
-        ]);
+        super.setLeyers([new LayerPath(ball, this._color[0], this), ...this.makeFlame(0, 7), ...this.makeFlame(90, 7), ...this.makeFlame(180, 7), ...this.makeFlame(270, 7), ...this.makeFlame(45, 5), ...this.makeFlame(90 + 45, 5), ...this.makeFlame(180 + 45, 5), ...this.makeFlame(270 + 45, 5)]);
     }
 
     private makeFlame(rotation: number, center: number) {

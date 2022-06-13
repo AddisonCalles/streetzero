@@ -1,22 +1,16 @@
-import { Kinematic, Health } from 'streetzero';
-import { HealthBar } from '../ui/healthBar.class';
-import { Sounds } from '../resources/sounds.class';
-import { Rocket } from './rocket.class';
+import { Health, Kinematic } from 'streetzero';
 import { SpaceShipV2Drawing } from '../drawings/space-ship.drawing';
+import { Sounds } from '../resources/sounds.class';
+import { HealthBar } from '../ui/healthBar.class';
 import { Enemy } from './enemies/enemy.class';
+import { Rocket } from './rocket.class';
 
 export class Player extends Kinematic {
     private _rockets: Rocket[] = [];
     private readonly maxRockts = 6;
     private _healthBar;
     private _health;
-    constructor(
-        _canvas: HTMLCanvasElement,
-        _color: string,
-        _x: number,
-        _y: number,
-        _health: number
-    ) {
+    constructor(_canvas: HTMLCanvasElement | null, _color: string, _x: number, _y: number, _health: number) {
         super(_canvas, _x, _y, 30, 40);
         super.centerOffset();
         this._health = new Health(_health);
@@ -28,14 +22,12 @@ export class Player extends Kinematic {
         this._rockets = [];
     }
     render() {
-        this._rockets.forEach(rocket => {
+        this._rockets.forEach((rocket) => {
             rocket.move();
             rocket.render();
         });
         this._healthBar.render();
-        this._rockets = this._rockets.filter(
-            rocket => rocket.x < this.canvas.width && !rocket.isDestroy()
-        );
+        this._rockets = this._rockets.filter((rocket) => rocket.x < this.canvas.width && !rocket.isDestroy());
         super.render();
     }
     fire() {

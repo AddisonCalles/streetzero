@@ -44,7 +44,7 @@ export const setEvents = (
     if (event == '0') return; //the Object.value(enum) return names and index
     const method = getMethodName(event);
     if (hasEventMethod(obj, event)) {
-      element.addEventListener(event, () => obj[method].call(obj, undefined));
+      element.addEventListener(event, e => obj[method].call(obj, e));
     }
   }
 };
@@ -63,8 +63,10 @@ export const Controller = (props?: ControllerProps) => {
     constructor_: T
   ) {
     return class extends injectable()(constructor_) {
+      controllerName: string;
       constructor(...args: any[]) {
         super(...args);
+        this.controllerName = constructor_.name;
         const _this = this;
         let canvas = props?.canvas;
         //Config Game Events

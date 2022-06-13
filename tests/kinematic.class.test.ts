@@ -5,7 +5,7 @@ const canvas = document.createElement('canvas');
 canvas.width = 100;
 canvas.height = 100;
 document.body.prepend(canvas);
-let kinematic:Kinematic;
+let kinematic: Kinematic;
 const width = 50;
 const height = 40;
 const x = 0;
@@ -14,10 +14,8 @@ beforeAll(() => {
   jest.useFakeTimers('modern');
   jest.spyOn(global, 'setInterval');
   jest.spyOn(global, 'setTimeout');
-  
 });
 beforeEach(() => {
-
   kinematic = new Kinematic(canvas, x, y, width, height);
 });
 afterEach(() => {
@@ -53,59 +51,56 @@ describe('Unit Tests Kinematic Class', () => {
     expect(kinematic.isDestroy()).toBeTruthy();
   });
   test('rotateToVectorial', () => {
-    expect(kinematic.rotateToVectorial(new Kinematic(canvas,50, 50, width, height))).toBeUndefined();
+    expect(
+      kinematic.rotateToVectorial(new Kinematic(canvas, 50, 50, width, height))
+    ).toBeUndefined();
     expect(kinematic.vector.dir).toBe(45);
   });
-  
+
   test('edgeCollision without offset', () => {
     kinematic.setPos(0, -1);
-    kinematic.vector.setVelXY(0,-1);
+    kinematic.vector.setVelXY(0, -1);
     const colisionTop = kinematic.edgeCollision();
     expect(colisionTop).toEqual([Directions.top]);
 
     kinematic.setPos(-1, -1);
-    kinematic.vector.setVelXY(-1,-1);
+    kinematic.vector.setVelXY(-1, -1);
     const colisionTopLeft = kinematic.edgeCollision();
     expect(colisionTopLeft).toEqual([Directions.left, Directions.top]);
 
     kinematic.setPos(-1, 0);
-    kinematic.vector.setVelXY(-1,0);
+    kinematic.vector.setVelXY(-1, 0);
     const colisionLeft = kinematic.edgeCollision();
     expect(colisionLeft).toEqual([Directions.left]);
 
-
     kinematic.setPos(-1, canvas.height);
-    kinematic.vector.setVelXY(-1,1);
+    kinematic.vector.setVelXY(-1, 1);
     const colisionLeftBottom = kinematic.edgeCollision();
     expect(colisionLeftBottom).toEqual([Directions.left, Directions.bottom]);
 
     kinematic.setPos(0, canvas.height);
-    kinematic.vector.setVelXY(0,1);
+    kinematic.vector.setVelXY(0, 1);
     const colisionBottom = kinematic.edgeCollision();
     expect(colisionBottom).toEqual([Directions.bottom]);
 
     kinematic.setPos(canvas.width, canvas.height);
-    kinematic.vector.setVelXY(1,1);
+    kinematic.vector.setVelXY(1, 1);
     const colisionRightBottom = kinematic.edgeCollision();
     expect(colisionRightBottom).toEqual([Directions.right, Directions.bottom]);
 
     kinematic.setPos(canvas.width, 0);
-    kinematic.vector.setVelXY(1,1);
+    kinematic.vector.setVelXY(1, 1);
     const colisionRight = kinematic.edgeCollision();
     expect(colisionRight).toEqual([Directions.right]);
 
     kinematic.setPos(0, 0);
-    kinematic.vector.setVelXY(1,1);
+    kinematic.vector.setVelXY(1, 1);
     const colisionFalsyTopLeft = kinematic.edgeCollision();
     expect(colisionFalsyTopLeft).toBeFalsy();
 
     kinematic.setPos(canvas.width, canvas.height);
-    kinematic.vector.setVelXY(-1,-1);
+    kinematic.vector.setVelXY(-1, -1);
     const colisionFalsyBottomRight = kinematic.edgeCollision();
     expect(colisionFalsyBottomRight).toBeFalsy();
-    
   });
-
-  
-  
 });

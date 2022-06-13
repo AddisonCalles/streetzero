@@ -6,12 +6,13 @@ import {
   getMethodName,
   hasEventMethod,
 } from '../../src/core/controller.decorator';
-import { GameEvents } from '../../src/enums/game.event.enum';
-import { MainGame } from '../../src/core/game.class';
+import { GameEvents } from '../../src/interfaces/gameevent.interface';
+import { GameEvents as GameEventEnum } from '../../src/enums/game.event.enum';
+import { zGame } from '../../src/core/zgame.class';
 
 describe('Controllers decorators', () => {
   test('Test Constructor de nombre de metodo del evento', () => {
-    expect(getMethodName(GameEvents.gameover)).toBe('onGameover');
+    expect(getMethodName(GameEventEnum.gameover)).toBe('onGameover');
   });
 
   test('Test Helpers Decorator Controllers', () => {
@@ -20,8 +21,8 @@ describe('Controllers decorators', () => {
       onRender() {}
     }
     const testController = new TestController();
-    expect(hasEventMethod(testController, GameEvents.render)).toBeTruthy();
-    expect(hasEventMethod(testController, GameEvents.start)).toBeFalsy();
+    expect(hasEventMethod(testController, GameEventEnum.render)).toBeTruthy();
+    expect(hasEventMethod(testController, GameEventEnum.start)).toBeFalsy();
   });
   test('General eventos en Decorator Controllers', () => {
     const onRender = jest.fn();
@@ -32,10 +33,15 @@ describe('Controllers decorators', () => {
     const onPause = jest.fn();
     const onPrenextlevel = jest.fn();
     const onPlay = jest.fn();
+    const onPreload = jest.fn();
+
     @Controller({ canvas, document })
-    class TestController {
+    class TestController implements GameEvents {
       test = 'contexto correcto';
       constructor() {}
+      onPreload(): void {
+        onPreload();
+      }
       onRender() {
         expect(this.test).toBe('contexto correcto');
         onRender();
@@ -71,14 +77,15 @@ describe('Controllers decorators', () => {
     }
     const testController = new TestController();
     testController;
-    for (const value of Object.values(GameEvents)) {
-      MainGame.dispatchEvent(value);
+    for (const value of Object.values(GameEventEnum)) {
+      zGame.dispatchEvent(value);
     }
+    expect(onStart).lastCalledWith();
+    expect(onPreload).lastCalledWith();
     expect(onRender).lastCalledWith();
+    expect(onStop).lastCalledWith();
     expect(onGameover).lastCalledWith();
     expect(onNextlevel).lastCalledWith();
-    expect(onStop).lastCalledWith();
-    expect(onStart).lastCalledWith();
     expect(onPause).lastCalledWith();
     expect(onPrenextlevel).lastCalledWith();
     expect(onPlay).lastCalledWith();

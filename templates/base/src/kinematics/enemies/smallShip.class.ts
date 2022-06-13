@@ -31,13 +31,7 @@ export class SmallShip extends Enemy {
     private _evilMode: NodeJS.Timeout | undefined;
     private _evilModeTimer: number = 99999;
     private _color;
-    constructor(
-        canvas: HTMLCanvasElement,
-        level: EnemyLevel,
-        x: number,
-        y: number,
-        player: Player
-    ) {
+    constructor(canvas: HTMLCanvasElement, level: EnemyLevel, x: number, y: number, player: Player) {
         super(canvas, x, y, 30, 40, level.health, player);
         super.centerOffset();
         this._color = level.color;
@@ -63,7 +57,7 @@ export class SmallShip extends Enemy {
         if (!this._evilMode) return super.destroy();
         try {
             clearInterval(this._evilMode);
-        } catch (error) { }
+        } catch (error) {}
         super.destroy();
     }
 }

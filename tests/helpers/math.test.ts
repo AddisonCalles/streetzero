@@ -64,29 +64,61 @@ test('Math intersection Rectangles', () => {
   const staticRectangle: Rectangle = { y: 0, y2: 10, x: 0, x2: 10 };
 
   expect(
-    intersectionRectangles(staticRectangle, { ...staticRectangle, x: -10.001, x2: -0.001})
+    intersectionRectangles(staticRectangle, {
+      ...staticRectangle,
+      x: -10.001,
+      x2: -0.001,
+    })
   ).toBeFalsy(); // outside to left
   expect(
-    intersectionRectangles(staticRectangle, { ...staticRectangle, x: 10.001, x2: 20.001})
+    intersectionRectangles(staticRectangle, {
+      ...staticRectangle,
+      x: 10.001,
+      x2: 20.001,
+    })
   ).toBeFalsy(); // outside to right
   expect(
-    intersectionRectangles(staticRectangle, { ...staticRectangle, y: 10.001, y2: 20.001})
+    intersectionRectangles(staticRectangle, {
+      ...staticRectangle,
+      y: 10.001,
+      y2: 20.001,
+    })
   ).toBeFalsy(); // outside to bottom
   expect(
-    intersectionRectangles(staticRectangle, { ...staticRectangle, y: -10.001, y2: -0.001})
+    intersectionRectangles(staticRectangle, {
+      ...staticRectangle,
+      y: -10.001,
+      y2: -0.001,
+    })
   ).toBeFalsy(); // outside to top
 
   expect(
-    intersectionRectangles(staticRectangle, { ...staticRectangle, x: 10.001, x2: 0})
+    intersectionRectangles(staticRectangle, {
+      ...staticRectangle,
+      x: 10.001,
+      x2: 0,
+    })
   ).toBeFalsy(); // intersection to left
   expect(
-    intersectionRectangles(staticRectangle, { ...staticRectangle, x: 10.001, x2: 20.001})
+    intersectionRectangles(staticRectangle, {
+      ...staticRectangle,
+      x: 10.001,
+      x2: 20.001,
+    })
   ).toBeFalsy(); // intersection to right
   expect(
-    intersectionRectangles(staticRectangle, { ...staticRectangle, y: 10.001, y2: 20.001})
+    intersectionRectangles(staticRectangle, {
+      ...staticRectangle,
+      y: 10.001,
+      y2: 20.001,
+    })
   ).toBeFalsy(); // intersection to bottom
   expect(
-    intersectionRectangles(staticRectangle, { ...staticRectangle, y: -10.001, y2: -0.001})
+    intersectionRectangles(staticRectangle, {
+      ...staticRectangle,
+      y: -10.001,
+      y2: -0.001,
+    })
   ).toBeFalsy(); // intersection to top
 
   // static inside  dynamic

@@ -1,5 +1,4 @@
-import { Directions, Kinematic } from 'streetzero';
-import { math } from 'streetzero';
+import { Directions, Kinematic, math } from 'streetzero';
 import { queenShipV1Drawing } from '../../drawings/enemies/queen-ship.drawing';
 import { EnergyBall } from '../energyball.class';
 import { Player } from '../player.class';
@@ -31,10 +30,8 @@ export class QueenShipV1 extends Enemy {
     }
 
     render() {
-        this._energyBalls = this._energyBalls.filter(
-            ball => !ball.edgeCollision() && !ball.isDestroy()
-        );
-        this._energyBalls.forEach(ball => {
+        this._energyBalls = this._energyBalls.filter((ball) => !ball.edgeCollision() && !ball.isDestroy());
+        this._energyBalls.forEach((ball) => {
             if (ball.hasColision(this.player)) {
                 this.player.health.reduce(1);
                 ball.destroy();
@@ -72,11 +69,7 @@ export class QueenShipV1 extends Enemy {
 
     fire() {
         const indexGun = parseInt(math.random(0, this._guns.length - 0.9).toString());
-        const energyBall = new EnergyBall(
-            this.canvas,
-            this.x + this._guns[indexGun].x,
-            this.y + this._guns[indexGun].y
-        );
+        const energyBall = new EnergyBall(this.canvas, this.x + this._guns[indexGun].x, this.y + this._guns[indexGun].y);
         energyBall.vector.setVector(3, 180);
         this._energyBalls.push(energyBall);
     }
@@ -85,7 +78,7 @@ export class QueenShipV1 extends Enemy {
         if (!this._gunsRunnerProcess) return super.destroy();
         try {
             clearInterval(this._gunsRunnerProcess);
-        } catch (error) { }
+        } catch (error) {}
         return super.destroy();
     }
 }

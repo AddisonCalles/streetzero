@@ -7,15 +7,7 @@ export class Enemy extends Kinematic {
     private _player;
     private _healthBar;
     private _health;
-    constructor(
-        canvas: any,
-        x: number,
-        y: number,
-        width: number,
-        height: number,
-        _health: number,
-        player: Player
-    ) {
+    constructor(canvas: any, x: number, y: number, width: number, height: number, _health: number, player: Player) {
         super(canvas, x, y, width, height);
         super.enabledGravity = false;
         super.centerOffset();
