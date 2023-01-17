@@ -206,7 +206,7 @@ Overwrite any of these methods within your MyGame class
 
 ---
 
-#### Pending documentation
+### Pending documentation
 
 ---
 
@@ -341,4 +341,4 @@ game.play();
 
 # Autor
 
-### Addison Calles
+## Addison Calles

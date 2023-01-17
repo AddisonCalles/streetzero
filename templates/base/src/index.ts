@@ -5,3 +5,4 @@ const engine = zEngine.initialize([SpaceController]);
 const game: zGame = engine.ioc.get(zGame);
 game.start();
 game.play();
+game.runHandDetection();

@@ -20,7 +20,11 @@
     "homepage": "https://github.com/AddisonCalles/shoot-space#readme",
     "dependencies": {
         "dotenv": "^16.0.0",
-        "streetzero": "^0.7.0"
+        "streetzero": "^0.7.6",
+        "@mediapipe/camera_utils": "^0.3.1640029074",
+        "@mediapipe/drawing_utils": "^0.3.1620248257",
+        "@mediapipe/hands": "^0.4.1646424915",
+        "device-detector-js": "^3.0.3"
     },
     "devDependencies": {
         "webpack": "^5.72.0",

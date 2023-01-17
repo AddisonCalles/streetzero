@@ -18,7 +18,7 @@ export class Enemy extends Kinematic {
 
     render() {
         this._healthBar.setPos(this.x, this.y + this.height + 5);
-        this._healthBar.render(Colors.background, '_76ff03');
+        this._healthBar.render(Colors.background, '#76ff03');
         super.render();
     }
     get health() {

@@ -10,6 +10,7 @@ import { Colors } from '../ui/colors';
 @Controller()
 export class SpaceController implements GameEvents, MouseEvents {
     private _player: Player;
+    private _lastFire?: Date;
     private _points = 0;
     private _enemies: Enemy[] = [];
     private _levelText = '';
@@ -33,7 +34,14 @@ export class SpaceController implements GameEvents, MouseEvents {
         } else if (this.game.gameOver) {
             this.reset();
         } else {
-            this.player.fire();
+            const now = new Date();
+            if (!this._lastFire) {
+                this._lastFire = new Date();
+                this.player.fire();
+            } else if (now.getTime() - this._lastFire.getTime() > 150) {
+                this._lastFire = new Date();
+                this.player.fire();
+            }
         }
     }
     onMousemove(event: any): void {
@@ -86,33 +94,32 @@ export class SpaceController implements GameEvents, MouseEvents {
         if (this.game.isPlay) {
             this._player.render();
             this.renderEnemies();
-            /*if (this.game.gameOver) {
-                this.onGameover();
-            }*/
-            if (this._levelText != '') {
+            if (this._levelText !== '') {
                 this.context.font = '20px Arial';
                 this.context.fillStyle = Colors.title;
                 this.context.fillText(this._levelText, this.canvas.width / 2 - 25, this.canvas.height / 2);
                 this.context.font = '10px Arial';
                 this.context.fillText('Powered By StreetZero A.C.', this.canvas.width / 2 - 50, this.canvas.height / 2 + 20);
             }
+            this.game.printDebug();
+            this.context.fillText(`Enemies: ${this.enemies.length} | Level: ${this.game.level} | points: ${this.game.points}`, 15, 45);
         }
     }
     renderEnemies() {
-        this._enemies.forEach((enemy) => {
+        this.enemies.forEach((enemy) => {
             if (!enemy.health.isDead) {
                 enemy.move();
                 if (this._player.isShootedEnemy(enemy)) {
-                    this._points++;
-                } else if (this._player.hasColision(enemy)) {
+                    this.game.incrementPoints();
+                } else if (this.player.hasColision(enemy)) {
                     enemy.destroy();
-                    this._player.health.reduce(1);
+                    this.player.health.reduce(1);
                 } else {
                     enemy.render();
                 }
             }
         });
-        this._enemies = this._enemies.filter((enemy) => !enemy.isDestroy());
+        this._enemies = this.enemies.filter((enemy) => !enemy.isDestroy());
         if (this.game.level % this._queenLevel == 0 && this._queen) {
             //Is Queen level
         } else if (this._enemies.length == 0 && this._levelText == '') {
@@ -132,7 +139,7 @@ export class SpaceController implements GameEvents, MouseEvents {
     onNextlevel() {
         if (!this.context || !this.canvas) return;
         if (this.game.level % this._queenLevel == 0) {
-            this._enemies.push(new QueenShipV1(this.canvas, this._player));
+            this.enemies.push(new QueenShipV1(this.canvas, this._player));
         }
         this.addEnemies(this.game.level);
     }
@@ -156,7 +163,7 @@ export class SpaceController implements GameEvents, MouseEvents {
             }
             const enemy = new SmallShip(this.canvas, levelEnemy, this.canvas.width - 100, math.random(this.canvas.height - 50, 50), this._player);
             enemy.vector.setVector(1.5 + this.game.level / 5, math.random(270, 90));
-            this._enemies.push(enemy);
+            this.enemies.push(enemy);
         }
     }
     get points() {
