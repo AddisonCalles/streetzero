@@ -1,16 +1,18 @@
 import { Camera } from '@mediapipe/camera_utils';
 import drawingUtils from '@mediapipe/drawing_utils';
 import { HAND_CONNECTIONS, Hands, LandmarkConnectionArray, NormalizedLandmarkList, Results, VERSION } from '@mediapipe/hands';
-import DeviceDetector from 'device-detector-js';
 import { distanciaApertura, distanciaEntrePuntos, normalizePunto } from './helpers';
 import { inject, injectable } from 'inversify';
 import { DOMContext } from '../dom.context.class';
+import { zDeviceDetector } from '../device.detector.class';
 const config = {
     locateFile: (file: string) => {
         console.log(`https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`);
         return `https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`;
     },
 };
+
+const videoSize = { width: 1280, height: 720 };
 
 export enum HandEvents {
     Fire = 'fire',
@@ -30,7 +32,7 @@ export class HandController {
     private _isRunning = false;
     private canvas: HTMLCanvasElement;
     private _analize: boolean = true;
-    constructor(@inject(DOMContext) context: DOMContext) {
+    constructor(@inject(DOMContext) context: DOMContext, @inject(zDeviceDetector) private deviceDetector: zDeviceDetector) {
         this.context = context.context!;
         this.canvas = context.canvas!;
         // legal values for client and os
@@ -47,28 +49,26 @@ export class HandController {
     }
 
     private testSupport(supportedDevices: { client?: string; os?: string }[]) {
-        const deviceDetector = new DeviceDetector();
-        const detectedDevice = deviceDetector.parse(navigator.userAgent);
-
         let isSupported = false;
         for (const device of supportedDevices) {
             if (device.client !== undefined) {
                 const re = new RegExp(`^${device.client}$`);
-                if (!re.test(detectedDevice.client?.name || '')) {
+                if (!re.test(this.deviceDetector.detector.client?.name || '')) {
                     continue;
                 }
             }
             if (device.os !== undefined) {
                 const re = new RegExp(`^${device.os}$`);
-                if (!re.test(detectedDevice.os?.name || '')) {
+                if (!re.test(this.deviceDetector.detector.os?.name || '')) {
                     continue;
                 }
             }
             isSupported = true;
             break;
         }
+
         if (!isSupported) {
-            alert(`This demo, running on ${detectedDevice.client?.name}/${detectedDevice.os?.name}, ` + `is not well supported at this time, continue at your own risk.`);
+            alert(`StreetZero detector de manos esta corriendo en  ${this.deviceDetector.detector.client?.name}/${this.deviceDetector.detector.os?.name}, ` + ` y actualmente no esta soportado, pero puedes continuar jugando con los controles habituales.`);
         }
     }
 
@@ -99,10 +99,11 @@ export class HandController {
 
                 if (!isRightHand) {
                     this.renderHand(landmarks, HAND_CONNECTIONS, isRightHand);
-                    const d1 = distanciaEntrePuntos(this.canvas, landmarks[0], landmarks[5]);
-                    const d2 = distanciaEntrePuntos(this.canvas, landmarks[0], landmarks[17]);
+                    const d1 = distanciaEntrePuntos(videoSize, landmarks[0], landmarks[5]);
+                    const d2 = distanciaEntrePuntos(videoSize, landmarks[0], landmarks[17]);
                     const unitLength = (d1.distance + d2.distance) / 2;
-                    const activador = distanciaApertura(this.canvas, landmarks[3], landmarks[5], unitLength);
+
+                    const activador = distanciaApertura(videoSize, landmarks[3], landmarks[5], unitLength);
                     const fire = activador.distance <= 0.35;
                     if (fire) {
                         this.canvas.click();
@@ -164,8 +165,8 @@ export class HandController {
                     this._analize = false;
                 }
             },
-            width: 1280,
-            height: 720,
+            width: videoSize.width,
+            height: videoSize.height,
         });
         this.camera.start();
     }

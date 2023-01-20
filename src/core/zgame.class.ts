@@ -3,6 +3,7 @@ import { Game } from '../interfaces/game.interface';
 import { inject, injectable } from 'inversify';
 import { DOMContext } from './dom.context.class';
 import { HandController } from './hands/hand.controller';
+import { zDeviceDetector } from './device.detector.class';
 @injectable()
 export class zGame implements Game {
     private _play = false;
@@ -18,7 +19,7 @@ export class zGame implements Game {
     private _initTime: number = 0;
     private _lastTime: number = 0;
     private _speed: number = 60;
-    constructor(@inject(DOMContext) context: DOMContext, @inject(HandController) private handDetection: HandController) {
+    constructor(@inject(DOMContext) context: DOMContext, @inject(HandController) private handDetection: HandController, @inject(zDeviceDetector) private deviceDetector: zDeviceDetector) {
         this._canvas = context.canvas;
         this._context = context.context;
     }
@@ -103,7 +104,18 @@ export class zGame implements Game {
         this._speed = value;
     }
     //#endregion setters
-
+    public orientation(orientation: 'portrait' | 'landscape') {
+        if (this.deviceDetector.detector.device?.type !== 'desktop') {
+            screen.orientation
+                .lock(orientation)
+                .then(function() {
+                    console.log('portrait set');
+                })
+                .catch(function(error) {
+                    console.error(error);
+                });
+        }
+    }
     private updateCounters() {
         const now = new Date().getTime();
         this._time = +((now - this._initTime) / 1000).toFixed(0);
