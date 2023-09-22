@@ -1,0 +1,38 @@
+{
+    "name": "street-zero-game-example",
+    "version": "1.0.0",
+    "description": "",
+    "main": "./src/main.ts",
+    "scripts": {
+        "test": "echo \"Error: no test specified\" && exit 1",
+        "build": "npx tsc --project .",
+        "start": "webpack serve --mode development --open --port=8081"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/AddisonCalles/shoot-space.git"
+    },
+    "author": "",
+    "license": "ISC",
+    "bugs": {
+        "url": "https://github.com/AddisonCalles/shoot-space/issues"
+    },
+    "homepage": "https://github.com/AddisonCalles/shoot-space#readme",
+    "dependencies": {
+        "dotenv": "^16.0.0",
+        "streetzero": "^0.7.7",
+        "@mediapipe/camera_utils": "^0.3.1640029074",
+        "@mediapipe/drawing_utils": "^0.3.1620248257",
+        "@mediapipe/hands": "^0.4.1646424915",
+        "device-detector-js": "^3.0.3"
+    },
+    "devDependencies": {
+        "webpack": "^5.72.0",
+        "webpack-cli": "^4.9.2",
+        "webpack-dev-server": "^4.9.0",
+        "ts-node": "^10.7.0",
+        "ts-loader": "^9.3.0",
+        "typescript": "^4.6.4",
+        "@babel/preset-typescript": "^7.16.0"
+    }
+}

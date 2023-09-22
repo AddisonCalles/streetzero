@@ -3,7 +3,7 @@
     "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.codeActionsOnSave": {
         "source.fixAll": true,
-        "source.organizeImports": false,
+        "source.organizeImports": true,
         "source.sortMembers": true
     },
     "prettier.configPath": ".prettierrc.json"

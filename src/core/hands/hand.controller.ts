@@ -1,10 +1,14 @@
 import { Camera } from '@mediapipe/camera_utils';
 import drawingUtils from '@mediapipe/drawing_utils';
 import { HAND_CONNECTIONS, Hands, LandmarkConnectionArray, NormalizedLandmarkList, Results, VERSION } from '@mediapipe/hands';
-import { distanciaApertura, distanciaEntrePuntos, normalizePunto } from './helpers';
 import { inject, injectable } from 'inversify';
-import { DOMContext } from '../dom.context.class';
 import { zDeviceDetector } from '../device.detector.class';
+import { DOMContext } from '../dom.context.class';
+import { HandFireEventDetector } from './application/events/HandFireEventDetector';
+import { HandDetectedEventDetector } from './application/events/HandsDetectedEventDetector';
+import { normalizePunto } from './application/helpers/lanmarks.helpers';
+import { HandEventDetector } from './domain/HandEventDetector';
+import { HandsEventDetails } from './domain/HandsEventDetails';
 const config = {
     locateFile: (file: string) => {
         console.log(`https://cdn.jsdelivr.net/npm/@mediapipe/hands@${VERSION}/${file}`);
@@ -14,16 +18,13 @@ const config = {
 
 const videoSize = { width: 1280, height: 720 };
 
-export enum HandEvents {
-    Fire = 'fire',
-}
-
 /**
  * @version beta
  * Falta optimizar
  */
 @injectable()
 export class HandController {
+    private eventDetectors: HandEventDetector[];
     private detector = new Hands(config);
     private camera?: Camera;
     private videoElement?: HTMLVideoElement;
@@ -37,6 +38,7 @@ export class HandController {
         this.canvas = context.canvas!;
         // legal values for client and os
         this.testSupport([{ client: 'Chrome' }]);
+        this.eventDetectors = [new HandFireEventDetector(), new HandDetectedEventDetector()];
 
         this.contextHands = (document.querySelector('.landmark-grid-container') as HTMLCanvasElement).getContext('2d')!;
         this.detector.setOptions({
@@ -83,7 +85,7 @@ export class HandController {
     }
 
     private onResults(results: Results): void {
-        console.log('onResult');
+        // console.log('onResult');
         // Hide the spinner.
         document.body.classList.add('loaded');
         this.contextHands.canvas.width = this.context.canvas.width;
@@ -91,28 +93,19 @@ export class HandController {
 
         this.clearCanvas(this.contextHands);
         this.contextHands.drawImage(results.image, 0, 0, this.canvas.width, this.canvas.height);
+        const handEventsData: HandsEventDetails = {};
         if (results.multiHandLandmarks && results.multiHandedness) {
             for (let index = 0; index < results.multiHandLandmarks.length; index++) {
                 const classification = results.multiHandedness[index];
                 const isRightHand = classification.label === 'Right';
                 const landmarks = results.multiHandLandmarks[index];
-
+                const hand = { landmarks: landmarks.map((l) => normalizePunto(this.canvas, l)), score: classification.score };
                 if (!isRightHand) {
                     this.renderHand(landmarks, HAND_CONNECTIONS, isRightHand);
-                    const d1 = distanciaEntrePuntos(videoSize, landmarks[0], landmarks[5]);
-                    const d2 = distanciaEntrePuntos(videoSize, landmarks[0], landmarks[17]);
-                    const unitLength = (d1.distance + d2.distance) / 2;
-
-                    const activador = distanciaApertura(videoSize, landmarks[3], landmarks[5], unitLength);
-                    const fire = activador.distance <= 0.35;
-                    if (fire) {
-                        this.canvas.click();
-                    }
-                    const normal = normalizePunto(this.canvas, landmarks[8]);
-                    const player = { x: normal[0], y: normal[1] };
+                    const player = normalizePunto(this.canvas, landmarks[8]);
                     if (player.x > this.canvas.width) {
                         player.x = this.canvas.width;
-                    } else if (player.x < this.canvas.width) {
+                    } else if (player.x < 0) {
                         player.x = 0;
                     }
                     if (player.y > this.canvas.height) {
@@ -120,7 +113,6 @@ export class HandController {
                     } else if (player.y < 0) {
                         player.y = 0;
                     }
-                    // Line (*) is equivalent to:
                     const event = new MouseEvent('mousemove', {
                         view: window,
                         bubbles: true,
@@ -129,11 +121,16 @@ export class HandController {
                         clientY: player.y,
                     });
                     this.canvas.dispatchEvent(event);
-                    // player(this.context, normalizePunto(this.canvas, landmarks[8])[1], fire);
-
-                    // const label = fire ? 'Disparar' : '';
-                    //drawTwoPoints(this.context, activador.p1.x, activador.p1.y, activador.p2.x, activador.p2.y, `${label} (${activador.distance})`);
+                    handEventsData.left = hand;
+                } else {
+                    handEventsData.right = hand;
                 }
+                this.eventDetectors.forEach((detector) => {
+                    const event = detector.detect(handEventsData, videoSize);
+                    if (event) {
+                        this.canvas.dispatchEvent(event);
+                    }
+                });
             }
         }
         this.contextHands.restore();
